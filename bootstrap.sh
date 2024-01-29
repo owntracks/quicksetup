@@ -1,6 +1,11 @@
 #!/bin/sh
 
-if ! which -s ansible; then
+if ! [ -f configuration.yaml ]; then
+	echo "Have you forgotten to copy and edit configuration.yaml?"
+	exit 2
+fi
+
+if ! which ansible-playbook > /dev/null; then
 	echo "Attempting to install ansible-core"
 	sudo apt update
 	sudo apt install -y ansible-core
@@ -13,4 +18,4 @@ fi
 
 export ANSIBLE_CONFIG=files/ansible/ansible.cfg
 
-ansible-playbook files/owntracks-setup.yml
+ansible-playbook owntracks-setup.yml

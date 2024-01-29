@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 <VirtualHost *:443>
-	ServerName ot.tcp53.ch
+	ServerName {{ dns_domain }}
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/html
 	LogLevel info ssl:warn
@@ -11,8 +11,8 @@
 	#Include conf-available/serve-cgi-bin.conf
 
 	SSLEngine on
-	SSLCertificateFile /etc/mosquitto/certs/.lego/certificates/ot.tcp53.ch.crt
-	SSLCertificateKeyFile /etc/mosquitto/certs/.lego/certificates/ot.tcp53.ch.key
+	SSLCertificateFile {{ otdir }}/tls/cert.crt
+	SSLCertificateKeyFile {{ otdir }}/tls/cert.key
 
 	<Directory "/var/www/html/owntracks">
 		AuthType Basic

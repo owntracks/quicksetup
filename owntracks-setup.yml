@@ -3,9 +3,16 @@
   connection: local
   gather_facts: false
   vars_files:
-     - configuration.yml
+     - configuration.yaml
   vars:
-     mosquittodir: /etc/mosquitto
+     packages:
+        - lego
+        - net-tools
+        - ufw
+        - mosquitto
+        - apache2-utils
+        - libapache2-mod-php
+        - python3-passlib
   tasks:
 #                 _
 #   ___ _   _ ___| |_ ___ _ __ ___
@@ -13,6 +20,21 @@
 #  \__ \ |_| \__ \ ||  __/ | | | | |
 #  |___/\__, |___/\__\___|_| |_| |_|
 #       |___/
+
+     - name: "system: install OwnTracks repository key"
+       get_url:
+          url: https://raw.githubusercontent.com/owntracks/recorder/master/etc/repo.owntracks.org.gpg.key
+          dest: /etc/apt/trusted.gpg.d/owntracks.asc
+
+     - name: "system: install OwnTracks repository"
+       apt_repository:
+          repo: deb  http://repo.owntracks.org/debian bookworm main
+          state: present
+
+     - name: "system: install required packages"
+       apt:
+          name: "{{ packages }}"
+          update_cache: true
 
      - name: "system: add ufw open ports"
        community.general.ufw:
@@ -37,6 +59,7 @@
        loop:
           - "{{ otdir }}"
           - "{{ userdata }}"
+          - "{{ otdir }}/tls"
 
      - name: Generate .otrc for users
        template:
@@ -113,7 +136,7 @@
        community.general.htpasswd:
           path: "{{ userdata }}/htpasswd"
           name: "{{ item.username }}"
-          password: "{{ lookup('password', '{{ userdata }}' + u.username + '.pw') }}"
+          password: "{{ lookup('password', '{{ userdata }}/' + item.username + '.pw') }}"
           owner: root
           group: www-data
           mode: 0444
