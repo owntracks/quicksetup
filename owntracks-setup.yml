@@ -155,7 +155,7 @@
           mode: 0444
        notify: restart_mosquitto
 
-     - name: "mosquitto: populate users in mosquitto.pw password file with generated passwords from *.pw"
+     - name: "mosquitto: build mosquitto.pw password file from user passwords"
        template:
           src: files/mosquitto/mosquitto.pw.j2
           dest: "{{ mosquittodir }}/mosquitto.pw"
@@ -198,6 +198,16 @@
 #   \__,_| .__/ \__,_|\___|_| |_|\___|
 #        |_|                          
 
+
+     - name: "apache: enable required modules"
+       community.general.apache2_module:
+          state: present
+          name: "{{ item }}"
+       loop:
+          - ssl
+          - proxy_wstunnel
+          - proxy_http
+       notify: restart_apache
 
      - name: "apache: template owntracks site configuration"
        template:
