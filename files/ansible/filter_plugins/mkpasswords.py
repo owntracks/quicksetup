@@ -15,7 +15,7 @@ def mkpasswords(users, directory):
             p = os.path.join(directory, u["username"] + ".pass")
             if os.path.exists(p):
                 with open(p, "r") as f:
-                    u["password"] = f.read()
+                    u["password"] = f.read().rstrip()
             else:
                 u["password"] = secrets.token_urlsafe(16)
 
