@@ -1,7 +1,7 @@
 - name: OwnTracks Quick Setup
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   vars_files:
      - configuration.yaml
   vars:
@@ -67,6 +67,41 @@
           src: files/otrc.j2
           dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
        loop: "{{ friends }}"
+
+#                            __ _ _
+#   _____      ____ _ _ __  / _(_) | ___
+#  / __\ \ /\ / / _` | '_ \| |_| | |/ _ \
+#  \__ \\ V  V / (_| | |_) |  _| | |  __/
+#  |___/ \_/\_/ \__,_| .__/|_| |_|_|\___|
+#                    |_|
+
+     - name: "system: create swapfile"
+       command: dd if=/dev/zero of=/swapfile1 bs=1M count=2048 creates=/swapfile
+       register: swapcreated
+       when: ansible_swaptotal_mb < 1
+   
+     - name: "system: set permissions on swapfile"
+       file:
+          path: /swapfile
+          mode: 0600
+       when: swapcreated.changed
+   
+     - name: "system: mkswap"
+       command: mkswap /swapfile
+       when: swapcreated.changed and (ansible_swaptotal_mb < 1)
+   
+     - name: "system: add swapfile to fstab"
+       lineinfile:
+          dest: /etc/fstab
+          regexp: "swapfile"
+          line: "/swapfile none swap sw 0 0"
+          state: present
+       when: swapcreated.changed and (ansible_swaptotal_mb < 1)
+   
+     - name: "system: activate swap"
+       command: swapon -a
+       when: swapcreated.changed
+
 
 #   _
 #  | | ___  __ _  ___
