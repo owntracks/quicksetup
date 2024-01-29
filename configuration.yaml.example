@@ -20,7 +20,14 @@ email: you@example.net
 # opencage_apikey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Configure yourself and a list of friends who will be using
-# this backend.
+# this backend. Each friend will use their "username" to login
+# to the site and to the apps. Their device is a "devicename"
+# (this can be any suitable name), and their "tid" is a tracker-
+# id which is used to label users on the map. A tid is a
+# string of length two characters. Optionally a "password" may
+# be set below; if omitted, passwords are generated and
+# stored in files in /usr/local/owntracks/userdata/*.pass on
+# this system.
 
 friends:
   - { tid: JJ, username: jane,       devicename: phone }
