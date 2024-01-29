@@ -89,6 +89,12 @@
           mode: 0555
        tags: lego
 
+     - name: "lego: enroll at letsencrypt"
+       command:
+          argv:
+             - "{{ otdir }}/lego/enroll.sh"
+       tags: lego
+
      - name: "lego: install cron job for letsencrypt renewals"
        cron:
           name: letsencrypt-ACME-certificate-renewal
