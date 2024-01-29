@@ -17,5 +17,7 @@ topic write owntracks/+/+
 user {{ u.username }}
 {# topic read $SYS/# #}
 topic readwrite owntracks/{{ u.username }}/#
+topic read owntracks/+/+/event
+topic read owntracks/+/+/info
 
 {% endfor %}
