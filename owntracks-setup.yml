@@ -185,6 +185,10 @@
 #   \___/ \__|    |_|  \___|\___\___/|_|  \__,_|\___|_|
 #
 
+     - name: "ot-recorder: install package"
+       apt:
+          name: "ot-recorder"
+
      - name: "ot-recorder: template ot-recorder defaults file"
        template:
           src: files/recorder/ot-recorder.default.j2
@@ -203,6 +207,10 @@
              - --initialize
        when: not mdb.stat.exists
 
+     - name: "ot-recorder: launch service"
+       service:
+           name: ot-recorder
+           state: started
 #                          _          
 #    __ _ _ __   __ _  ___| |__   ___ 
 #   / _` | '_ \ / _` |/ __| '_ \ / _ \
