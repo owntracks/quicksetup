@@ -79,6 +79,8 @@
           src: files/otrc.j2
           dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
        loop: "{{ friends }}"
+       loop_control:
+           label: "{{ item.username }}"
 
 #                            __ _ _
 #   _____      ____ _ _ __  / _(_) | ___
@@ -257,6 +259,8 @@
           group: www-data
           mode: 0444
        loop: "{{ friends }}"
+       loop_control:
+           label: "{{ item.username }}"
 
      - name: "apache: create owntracks/ directory in Web root"
        file:
