@@ -221,6 +221,21 @@
              - --initialize
        when: not mdb.stat.exists
 
+     - name: "ot-recorder: create service unit override directory"
+       file:
+          path: "/etc/systemd/system/ot-recorder.service.d"
+          state: directory
+          mode: 0755
+
+     - name: "ot-recorder: populate systemd override file"
+       copy:
+          content: |
+             [Service]
+             # works as environment variable only (not in ot-recorder defaults)
+             Environment="OTR_LMDBSIZE={{ 200 * 1024 * 1024 }}"
+          dest: "/etc/systemd/system/ot-recorder.service.d/override.conf"
+          mode: 0444
+
      - name: "ot-recorder: launch service"
        service:
            name: ot-recorder
