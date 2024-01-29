@@ -89,6 +89,16 @@
           mode: 0555
        tags: lego
 
+     - name: "lego: install cron job for letsencrypt renewals"
+       cron:
+          name: letsencrypt-ACME-certificate-renewal
+          minute: "{{ 59 | random(seed=dns_domain) }}"
+          hour: "04"
+          user: root
+          job: "[ -x {{ otdir }}/lego/enroll.sh ] && {{ otdir }}/lego/enroll.sh"
+       tags: lego
+
+
 
 #                                   _ _   _        
 #   _ __ ___   ___  ___  __ _ _   _(_) |_| |_ ___  
