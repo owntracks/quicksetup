@@ -94,6 +94,32 @@
           dest: "/etc/default/ot-recorder"
        notify: restart_recorder
 
+#                          _          
+#    __ _ _ __   __ _  ___| |__   ___ 
+#   / _` | '_ \ / _` |/ __| '_ \ / _ \
+#  | (_| | |_) | (_| | (__| | | |  __/
+#   \__,_| .__/ \__,_|\___|_| |_|\___|
+#        |_|                          
+
+
+     - name: "apache: template owntracks site configuration"
+       template:
+          src: files/apache/owntracks.conf.j2
+          dest: "/etc/apache2/sites-enabled/owntracks.conf"
+          mode: 0444
+       notify: restart_apache
+
+     - name: "apache: add users to htpasswd"
+       community.general.htpasswd:
+          path: "{{ userdata }}/htpasswd"
+          name: "{{ item.username }}"
+          password: "{{ lookup('password', '{{ userdata }}' + u.username + '.pw') }}"
+          owner: root
+          group: www-data
+          mode: 0444
+       loop: "{{ friends }}"
+
+
 #    __                 _                 _ 
 #   / _|_ __ ___  _ __ | |_ ___ _ __   __| |
 #  | |_| '__/ _ \| '_ \| __/ _ \ '_ \ / _` |
@@ -135,6 +161,11 @@
      - name: restart_mosquitto
        service:
            name: mosquitto
+           state: restarted
+
+     - name: restart_apache
+       service:
+           name: apache2
            state: restarted
 
      - name: restart_recorder
