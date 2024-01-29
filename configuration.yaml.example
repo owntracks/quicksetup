@@ -17,7 +17,7 @@ email: you@example.net
 # you with an API key you add here.
 #
 
-opencage_apikey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# opencage_apikey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # Configure yourself and a list of friends who will be using
 # this backend.
