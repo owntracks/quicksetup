@@ -191,6 +191,18 @@
           dest: "/etc/default/ot-recorder"
        notify: restart_recorder
 
+     - name: "ot-recorder: check whether we need initialization"
+       stat:
+          path: "/var/spool/owntracks/recorder/store/ghash/data.mdb"
+       register: mdb
+
+     - name: "ot-recorder: initialize backend (nondestructive)"
+       command:
+          argv:
+             - /usr/sbin/ot-recorder
+             - --initialize
+       when: not mdb.stat.exists
+
 #                          _          
 #    __ _ _ __   __ _  ___| |__   ___ 
 #   / _` | '_ \ / _` |/ __| '_ \ / _ \
