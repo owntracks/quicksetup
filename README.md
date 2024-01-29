@@ -1,6 +1,16 @@
 # quicksetup
+
 Work in progress 
 
+## features
+
+- OwnTracks [Frontend](https://github.com/owntracks/frontend)
+- OwnTracks [Recorder](https://github.com/owntracks/recorder)
+- MQTT broker (Mosquitto) and HTTP server (Apache) secured with SSL/TLS using Let's Encrypt certificates
+- automatic configuration of friends, each of which can see eachother also on Frontend, etc.
+- creation of OwnTracks [.otrc remote configuration files](https://owntracks.org/booklet/features/remoteconfig/) for ease of configuration of the apps
+- automatic and random password generation
+- optional but recommended [OpenCageData](https://opencagedata.com/) for reverse geo. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.)
 
 ## installation
 
@@ -17,7 +27,17 @@ Work in progress
       $ tar xf master.tar.gz
       $ cd quicksetup-main
       ```
-2. Launch the installer
+
+2. Make a copy of the [configuration file](configuration.yaml.example) used for setup and edit its content.
+   ```console
+   $ cp configuration.yaml.example configuration.yaml
+   $ node configuration.yaml
+   ```
+
+3. Launch the installer which will install packages and configure services.
    ```console
    $ ./bootstrap.sh
    ```
+
+If you later decide you wish to add a friend to `configuration.yaml`, just run the installer again: `./bootstrap.sh`.
+
