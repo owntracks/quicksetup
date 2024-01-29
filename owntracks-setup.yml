@@ -62,7 +62,19 @@
           - "{{ otdir }}/tls"
           - "{{ otdir }}/lego"
 
-     - name: Generate .otrc for users
+     - name: "system: add passwords to userdata"
+       set_fact:
+          friends: "{{ friends | mkpasswords(otdir + '/userdata') }}"
+
+     - name: "system: create password files in userdata"
+       copy:
+          content: "{{ item.password }}"
+          dest: "{{ otdir }}/userdata/{{ item.username }}.pass"
+       loop: "{{ friends }}"
+       loop_control:
+           label: "{{ item.username }}"
+
+     - name: "system: generate user .otrc files in userdata"
        template:
           src: files/otrc.j2
           dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
@@ -240,7 +252,7 @@
        community.general.htpasswd:
           path: "{{ userdata }}/htpasswd"
           name: "{{ item.username }}"
-          password: "{{ lookup('password', '{{ userdata }}/' + item.username + '.pw') }}"
+          password: "{{ item.password }}"
           owner: root
           group: www-data
           mode: 0444

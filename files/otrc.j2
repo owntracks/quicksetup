@@ -8,7 +8,7 @@
         "deviceId": item.devicename,
         "extendedData": True,
         "host": dns_domain,
-        "password": lookup('password', "{{ userdata }}/{{ item.username }}" + ".pw"),
+        "password": item.password,
         "port": 8883,
         "positions": 200,
         "pubQos": 2,
