@@ -65,6 +65,7 @@
      - name: "system: add passwords to userdata"
        set_fact:
           friends: "{{ friends | mkpasswords(otdir + '/userdata') }}"
+       tags: web
 
      - name: "system: create password files in userdata"
        copy:
@@ -73,6 +74,7 @@
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username }}"
+       tags: web
 
      - name: "system: generate user .otrc files in userdata"
        template:
@@ -81,6 +83,7 @@
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username }}"
+       tags: web
 
 #                            __ _ _
 #   _____      ____ _ _ __  / _(_) | ___
@@ -256,6 +259,7 @@
           - ssl
           - proxy_wstunnel
           - proxy_http
+       tags: web
        notify: restart_apache
 
      - name: "apache: template owntracks site configuration"
@@ -263,6 +267,7 @@
           src: files/apache/owntracks.conf.j2
           dest: "/etc/apache2/sites-enabled/owntracks.conf"
           mode: 0444
+       tags: web
        notify: restart_apache
 
      - name: "apache: add users to htpasswd"
@@ -276,18 +281,28 @@
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username }}"
+       tags: web
 
      - name: "apache: create owntracks/ directory in Web root"
        file:
           path: "{{ otweb }}"
           state: directory
           mode: 0755
+       tags: web
 
-     - name: "apache: install OwnTrack's index.html"
-       copy:
-          src: files/apache/index.html
-          dest: "/var/www/html/owntracks/index.html"
+     - name: "apache: install OwnTrack's index.php"
+       template:
+          src: files/apache/index.php.j2
+          dest: "/var/www/html/owntracks/index.php"
           mode: 0444
+       tags: [ web, web1 ]
+
+     - name: "apache: install OwnTrack's otrc.php"
+       template:
+          src: files/apache/otrc.php.j2
+          dest: "/var/www/html/owntracks/otrc.php"
+          mode: 0444
+       tags: [ web, web1 ]
 
 #    __                 _                 _ 
 #   / _|_ __ ___  _ __ | |_ ___ _ __   __| |

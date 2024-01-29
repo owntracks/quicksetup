@@ -18,6 +18,14 @@
 		margin: 15px;
 	}
 
+	pre {
+		white-space:pre-wrap;
+		overflow-y:scroll;
+		max-width:400px;
+		height:80px;
+		border:0.5px solid lightgray; padding:5px;
+	}
+
 	a { text-decoration:  underline; color: inherit;}
 </style>
 </head>
@@ -31,4 +39,23 @@
 <li><a href="/owntracks/api/0/locations?from=2023-12-17&to=2023-12-21&format=geojsonpoi&user=jane&device=phone">Points of Interest from past month</a></li>
 -->
 </ul>
+
+<h2>configuration</h3>
+<p>
+  There are two methods to configure your Android or iOS OwnTracks app:
+</p>
+<ul>
+<li><a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">URL config</a></li>
+<li><a href="otrc.php">otrc file download</a></li>
+</ul>
+
 </html>
+
+<?php
+function remoteconf($username) {
+	$fname = "/usr/local/owntracks/userdata/{$username}.otrc";
+	$data = file_get_contents($fname);
+	$config= base64_encode($data);
+	echo("owntracks:///config?inline={$config}");
+}
+?>
