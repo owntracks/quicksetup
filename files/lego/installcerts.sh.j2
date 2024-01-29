@@ -1,0 +1,11 @@
+#!/bin/sh
+
+env | sort > /tmp/lego.env
+
+if [ -n "$LEGO_CERT_PATH" ]; then
+
+	install -o root -g root -m 0644 "$LEGO_CERT_PATH" "{{ otdir }}/tls/cert.crt"
+	install -o root -g root -m 0644 "$LEGO_CERT_KEY_PATH" "{{ otdir }}/tls/cert.key"
+
+	systemctl restart mosquitto
+fi

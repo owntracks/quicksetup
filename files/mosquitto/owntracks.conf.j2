@@ -28,7 +28,8 @@ listener 1883 127.0.0.1
 
 # -- 8883 ----- TLS
 listener 8883
-cafile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.issuer.crt
-certfile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.crt
-keyfile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.key
+# cafile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.issuer.crt
+cafile {{ otdir }}/tls/cert.crt
+certfile {{ otdir }}/tls/cert.crt
+keyfile {{ otdir }}/tls/cert.key
 # -- ends

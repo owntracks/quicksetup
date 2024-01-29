@@ -18,4 +18,4 @@ fi
 
 export ANSIBLE_CONFIG=files/ansible/ansible.cfg
 
-ansible-playbook owntracks-setup.yml
+ansible-playbook owntracks-setup.yml "$@"
