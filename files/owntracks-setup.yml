@@ -1,0 +1,143 @@
+- name: OwnTracks Quick Setup
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+     - configuration.yml
+  vars:
+     mosquittodir: /etc/mosquitto
+  tasks:
+#                 _
+#   ___ _   _ ___| |_ ___ _ __ ___
+#  / __| | | / __| __/ _ \ '_ ` _ \
+#  \__ \ |_| \__ \ ||  __/ | | | | |
+#  |___/\__, |___/\__\___|_| |_| |_|
+#       |___/
+
+     - name: "system: add ufw open ports"
+       community.general.ufw:
+          rule: allow
+          port: "{{ item }}"
+          proto: "tcp"
+       loop:
+          - "ssh"
+          - "80"
+          - "443"
+          - "8883"
+
+     - name: "system: enable ufw"
+       community.general.ufw:
+          state: enabled
+
+     - name: "system: create directories"
+       file:
+          path: "{{ item }}"
+          state: directory
+          mode: 0755
+       loop:
+          - "{{ otdir }}"
+          - "{{ userdata }}"
+
+     - name: Generate .otrc for users
+       template:
+          src: files/otrc.j2
+          dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
+       loop: "{{ friends }}"
+
+#                                   _ _   _        
+#   _ __ ___   ___  ___  __ _ _   _(_) |_| |_ ___  
+#  | '_ ` _ \ / _ \/ __|/ _` | | | | | __| __/ _ \ 
+#  | | | | | | (_) \__ \ (_| | |_| | | |_| || (_) |
+#  |_| |_| |_|\___/|___/\__, |\__,_|_|\__|\__\___/ 
+#                          |_|                     
+
+     - name: "mosquitto: template configuration for OwnTracks"
+       template:
+          src: files/mosquitto/owntracks.conf.j2
+          dest: "{{ mosquittodir }}/conf.d/owntracks.conf"
+          mode: 0444
+       notify: restart_mosquitto
+
+     - name: "mosquitto: populate users in mosquitto.pw password file with generated passwords from *.pw"
+       template:
+          src: files/mosquitto/mosquitto.pw.j2
+          dest: "{{ mosquittodir }}/mosquitto.pw"
+          mode: 0644
+       notify: restart_mosquitto
+
+#     - name: Populate users in mosquitto.pw password file with generated passwords in *.pw
+#       command:
+#          argv:
+#             - mosquitto_passwd
+#             - -b
+#             - "{{ mosquittodir }}/mosquitto.pw"
+#             - "{{ item }}"
+#             - "{{ lookup('password', item + '.pw') }}"
+#       loop: "{{ [ 'recorder' ] + friends|map(attribute='username') }}"
+
+     - name: "mosquitto: template mosquitto.acl"
+       template:
+          src: files/mosquitto/mosquitto.acl.j2
+          dest: "{{ mosquittodir }}/mosquitto.acl"
+       notify: restart_mosquitto
+
+#         _                                   _
+#    ___ | |_      _ __ ___  ___ ___  _ __ __| | ___ _ __
+#   / _ \| __|____| '__/ _ \/ __/ _ \| '__/ _` |/ _ \ '__|
+#  | (_) | ||_____| | |  __/ (_| (_) | | | (_| |  __/ |
+#   \___/ \__|    |_|  \___|\___\___/|_|  \__,_|\___|_|
+#
+
+     - name: "ot-recorder: template ot-recorder defaults file"
+       template:
+          src: files/recorder/ot-recorder.default.j2
+          dest: "/etc/default/ot-recorder"
+       notify: restart_recorder
+
+#    __                 _                 _ 
+#   / _|_ __ ___  _ __ | |_ ___ _ __   __| |
+#  | |_| '__/ _ \| '_ \| __/ _ \ '_ \ / _` |
+#  |  _| | | (_) | | | | ||  __/ | | | (_| |
+#  |_| |_|  \___/|_| |_|\__\___|_| |_|\__,_|
+#                                           
+
+     - name: "frontend: create frontend/ directory in Web root"
+       file:
+          path: "{{ otweb }}/frontend"
+          state: directory
+          mode: 0755
+       tags: fe
+
+     - name: "frontend: unpack dist"
+       unarchive:
+          src: files/frontend/frontend-dist.tar.gz
+          dest: "{{ otweb }}/frontend"
+          remote_src: no
+       tags: fe
+
+
+     - name: "frontend: template out config.js"
+       template:
+          src: files/frontend/config.js.j2
+          dest: "{{ otweb }}/frontend/config/config.js"
+          mode: 0444
+       tags: fe
+
+#   _                     _ _
+#  | |__   __ _ _ __   __| | | ___ _ __ ___
+#  | '_ \ / _` | '_ \ / _` | |/ _ \ '__/ __|
+#  | | | | (_| | | | | (_| | |  __/ |  \__ \
+#  |_| |_|\__,_|_| |_|\__,_|_|\___|_|  |___/
+#
+
+  handlers:
+
+     - name: restart_mosquitto
+       service:
+           name: mosquitto
+           state: restarted
+
+     - name: restart_recorder
+       service:
+           name: ot-recorder
+           state: restarted

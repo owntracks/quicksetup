@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+# anon
+topic read test/#
+
+# recorder needs readwrite in order to publish TOURS list
+user recorder
+topic read owntracks/#
+topic write owntracks/+/+/cmd
+{#
+# Lua
+topic write owntracks/+/+
+#}
+
+#----------------------------
+{% for u in friends|list %}
+user {{ u.username }}
+{# topic read $SYS/# #}
+topic readwrite owntracks/{{ u.username }}/#
+
+{% endfor %}

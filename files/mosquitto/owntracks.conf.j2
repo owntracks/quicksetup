@@ -1,0 +1,34 @@
+# {{ ansible_managed }}
+
+connection_messages true
+log_dest topic
+log_type error
+log_type warning
+log_type notice
+log_type information
+log_type all
+log_type debug
+log_timestamp true
+
+max_inflight_messages 20
+max_queued_messages 9000
+
+acl_file /etc/mosquitto/mosquitto.acl
+password_file /etc/mosquitto/mosquitto.pw
+
+#   _     _     _
+#  | |   (_)___| |_ ___ _ __   ___ _ __ ___
+#  | |   | / __| __/ _ \ '_ \ / _ \ '__/ __|
+#  | |___| \__ \ ||  __/ | | |  __/ |  \__ \
+#  |_____|_|___/\__\___|_| |_|\___|_|  |___/
+#
+
+# -- 1883 ----- Plain (loopback only)
+listener 1883 127.0.0.1
+
+# -- 8883 ----- TLS
+listener 8883
+cafile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.issuer.crt
+certfile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.crt
+keyfile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.key
+# -- ends

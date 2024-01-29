@@ -1,0 +1,10 @@
+// {{ ansible_managed }}
+window.owntracks = window.owntracks || {};
+window.owntracks.config = {
+  api: {
+    baseUrl: "https://{{ dns_domain }}/owntracks",
+  },
+  router: {
+    basePath: "/owntracks/frontend",
+  },
+};

@@ -1,0 +1,28 @@
+# configuration for OwnTracks backend quicksetup
+
+# Specify your DNS domain. We use this to obtain
+# Let's Encrypt certificates on your behalf
+#
+
+dns_domain: owntracks.example.net
+
+# specify your email address. We use this when signing up on your
+# behalf to Let's Encrypt and for nothing else.
+#
+
+email: you@example.net
+
+# We strongly recommend you sign up for the free reverse geo
+# service at OpenCage. It costs you nothing, and they provide
+# you with an API key you add here.
+#
+
+opencage_apikey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Configure yourself and a list of friends who will be using
+# this backend.
+
+friends:
+  - { tid: JJ, username: jane,       devicename: phone }
+  - { tid: AA, username: aaa,        devicename: s10 }
+  - { tid: BB, username: bbb,        devicename: nokia }

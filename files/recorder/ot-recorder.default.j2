@@ -1,0 +1,74 @@
+# {{ ansible_managed }}
+#(@)ot-recorder.default
+
+# -----------------------------------------------------
+# Storage directory
+OTR_STORAGEDIR="/var/spool/owntracks/recorder/store"
+
+# -----------------------------------------------------
+# Address or hostname of the MQTT broker
+OTR_HOST="127.0.0.1"
+
+# -----------------------------------------------------
+# Port number of the MQTT broker. Defaults to 1883.
+# MQTT can be disabled by setting this to 0.
+OTR_PORT=1883
+
+# -----------------------------------------------------
+# Username for the MQTT connection
+OTR_USER="recorder"
+
+# -----------------------------------------------------
+# Password for the MQTT connection
+OTR_PASS="{{ lookup('password', '{{ userdata }}/recorder.pw') }}"
+
+# -----------------------------------------------------
+# QoS for MQTT connection
+OTR_QOS=2
+
+# -----------------------------------------------------
+# MQTT clientid (default is constant+hostname+pid)
+OTR_CLIENTID="otrec"
+
+# -----------------------------------------------------
+# Path to PEM-encoded CA certificate file for MQTT (no default)
+# OTR_CAFILE=""
+
+# -----------------------------------------------------
+# Address for the HTTP module to bind to (default: localhost)
+# OTR_HTTPHOST="localhost"
+OTR_HTTPHOST="127.0.0.1"
+
+# -----------------------------------------------------
+# Port number for the HTTP module to bind to (default: 8083)
+OTR_HTTPPORT=8083
+
+# -----------------------------------------------------
+# Prefix URL to recorder for Tours
+OTR_HTTPPREFIX="https://{{ dns_domain }}/owntracks"
+
+# -----------------------------------------------------
+# optional path to HTTP directory in which to store
+# access log. Default is to not log access
+# OTR_HTTPLOGDIR=""
+
+# -----------------------------------------------------
+# API key for reverse-geo lookups
+{% if opencage_apikey is defined %}
+OTR_GEOKEY="opencage:{{ opencage_apikey }}"
+{% else %}
+#OTR_GEOKEY=""
+{% endif %}
+
+# -----------------------------------------------------
+# Reverse geo precision
+OTR_PRECISION=7
+
+# -----------------------------------------------------
+# Browser API key for Google maps
+# OTR_BROWSERAPIKEY=""
+
+# -----------------------------------------------------
+# List of topics for MQTT to subscribe to, blank separated in a string
+OTR_TOPICS="owntracks/#"
+
