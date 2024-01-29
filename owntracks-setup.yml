@@ -68,7 +68,7 @@
 
      - name: "system: create password files in userdata"
        copy:
-          content: "{{ item.password }}"
+          content: "{{ item.password | string + '\n' }}"
           dest: "{{ otdir }}/userdata/{{ item.username }}.pass"
        loop: "{{ friends }}"
        loop_control:
