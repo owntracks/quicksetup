@@ -205,6 +205,7 @@
      - name: "ot-recorder: install package"
        apt:
           name: "ot-recorder"
+          state: latest
 
      - name: "ot-recorder: template ot-recorder defaults file"
        template:
@@ -301,6 +302,23 @@
        template:
           src: files/apache/otrc.php.j2
           dest: "/var/www/html/owntracks/otrc.php"
+          mode: 0444
+       tags: [ web, web1 ]
+
+     - name: "apache: overwrite default index.html"
+       copy:
+          content: |
+              <html><head><title>Nope</title></head><body>
+              <pre>nope</pre>
+              </body></html>
+          dest: "/var/www/html/index.html"
+          mode: 0444
+       tags: [ web, web1 ]
+
+     - name: "apache: install favicon.ico"
+       copy:
+          src: files/apache/favicon.ico
+          dest: "/var/www/html/favicon.ico"
           mode: 0444
        tags: [ web, web1 ]
 
