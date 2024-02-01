@@ -1,9 +1,11 @@
 {# https://nerdoftheherd.com/news/2021/12/30/ansible-mosquitto-password-hash/ #}
 {#
  # first add password for local 'recorder' user
+ # second add password for a "local reader" user (distinct from 'recorder' to differentiate in logs)
  # then add all friends with their passwords from their *.pw files
 #}
 recorder:{{ lookup('password', '{{ userdata }}/recorder.pw') | mosquitto_passwd }}
+_lr:{{ lookup('password', '{{ userdata }}/.lr.pw') | mosquitto_passwd }}
 {% for u in friends %}
 {{ u.username }}:{{ u.password | string | mosquitto_passwd }}
 {% endfor %}

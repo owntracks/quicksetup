@@ -7,6 +7,11 @@ topic read test/#
 user recorder
 topic read owntracks/#
 topic write owntracks/+/+/cmd
+
+# local reader will be able to read everything
+user _lr
+topic read #
+
 {#
 # Lua
 topic write owntracks/+/+

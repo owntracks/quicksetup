@@ -2,7 +2,7 @@
   hosts: localhost
   connection: local
   gather_facts: true
-  become: true
+  #become: true
   vars_files:
      - configuration.yaml
   vars:
@@ -66,7 +66,7 @@
      - name: "system: add passwords to userdata"
        set_fact:
           friends: "{{ friends | mkpasswords(otdir + '/userdata') }}"
-       tags: web
+       tags: web, pw
 
      - name: "system: create password files in userdata"
        copy:
@@ -195,6 +195,18 @@
           src: files/mosquitto/mosquitto.acl.j2
           dest: "{{ mosquittodir }}/mosquitto.acl"
        notify: restart_mosquitto
+
+     - name: "mosquitto: ensure $HOME/.config/ exists"
+       file:
+          path: "{{ lookup('env', 'USER' }}/.config/mosquitto_sub"
+          state: directory
+          mode: 0755
+
+     - name: "mosquitto: template $HOME/.config/mosquitto_sub"
+       template:
+          src: files/mosquitto/mosquitto_sub.j2
+          dest: "{{ lookup('env', 'USER' }}/.config/mosquitto_sub"
+          mode: 0444
 
 #         _                                   _
 #    ___ | |_      _ __ ___  ___ ___  _ __ __| | ___ _ __
