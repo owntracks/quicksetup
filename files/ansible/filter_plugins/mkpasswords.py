@@ -7,7 +7,9 @@ import os
 def mkpasswords(users, directory):
     newusers = []
 
-    print(directory)
+    # print(directory)
+
+    ## users.append(dict(tid="rr", username="_rr"))
 
     for u in users:
         if not "password" in u:
