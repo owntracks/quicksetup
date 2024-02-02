@@ -8,9 +8,12 @@ user recorder
 topic read owntracks/#
 topic write owntracks/+/+/cmd
 
-# local reader will be able to read everything
+# local reader will be able to read everything and write in
+# owntracks/ which permits console user to, say, delete
+# retained messages
 user _lr
 topic read #
+topic write owntracks/#
 
 {#
 # Lua

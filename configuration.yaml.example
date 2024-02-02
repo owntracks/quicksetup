@@ -30,6 +30,6 @@ email: you@example.net
 # this system.
 
 friends:
-  - { tid: JJ, username: jane,       devicename: phone }
+  - { tid: JJ, username: jane,       devicename: nokia }
   - { tid: AA, username: aaa,        devicename: s10 }
   - { tid: BB, username: bbb,        devicename: nokia }

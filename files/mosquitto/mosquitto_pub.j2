@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+--host 127.0.0.1
+--port 1883
+--username _lr
+--pw {{ lookup('password', '{{ userdata }}/.lr.pw') }}
+--id mclipub
+--protocol-version mqttv5
