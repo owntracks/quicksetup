@@ -4,13 +4,20 @@ Work in progress
 
 ## features
 
-- properly configured OwnTracks [Recorder](https://github.com/owntracks/recorder) with its [Frontend](https://github.com/owntracks/frontend)
-- MQTT broker (Mosquitto) and HTTP server (Apache) secured with SSL/TLS using Let's Encrypt certificates
+- Let's Encrypt certificate enrollment and renewal (cron)
+- MQTT broker (Mosquitto) and HTTP server (Apache) secured with SSL/TLS
+- configured OwnTracks [Recorder](https://github.com/owntracks/recorder)
+- [Frontend](https://github.com/owntracks/frontend)
 - automatic configuration of friends, each of which can see eachother via MQTT in the apps and on Frontend, etc.
 - users can download pre-configured [.otrc remote configuration files](https://owntracks.org/booklet/features/remoteconfig/) for ease of configuration of the apps
-- automatic and random password generation
+- users are created with random passwords
+- these same users inserted into `mosquitto.pw`, `mosquitto.acl`, and `htpasswd`
 - optional but recommended [OpenCageData](https://opencagedata.com/) for reverse geo. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.) Location data is cached by the Recorder and stored alongside location publishes, served from the API
 - should be able to support a dozen or more friends on a 512MB VPS
+- `mosquitto_pub`/`mosquitto_sub` pre-configured to use local broker with files in `$HOME/.config/`
+- ufw firewall with open TCP ports at 22, 80, 443, 8883
+- jq and jo
+- bootstrapping of installation
 
 ## installation
 
