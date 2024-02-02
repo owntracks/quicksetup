@@ -3,6 +3,6 @@
 --port 1883
 --username _lr
 --pw {{ lookup('password', '{{ userdata }}/.lr.pw') }}
---id mcli
+--id-prefix mcli
 --protocol-version mqttv5
 --verbose
