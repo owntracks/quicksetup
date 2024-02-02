@@ -2,7 +2,6 @@
   hosts: localhost
   connection: local
   gather_facts: true
-  #become: true
   vars_files:
      - configuration.yaml
   vars:
@@ -11,9 +10,12 @@
         - net-tools
         - ufw
         - mosquitto
+        - mosquitto-clients
         - apache2-utils
         - libapache2-mod-php
         - python3-passlib
+        - jq
+        - jo
   tasks:
 #                 _
 #   ___ _   _ ___| |_ ___ _ __ ___
@@ -198,14 +200,14 @@
 
      - name: "mosquitto: ensure $HOME/.config/ exists"
        file:
-          path: "{{ lookup('env', 'USER' }}/.config/mosquitto_sub"
+          path: "{{ lookup('env', 'HOME') }}/.config"
           state: directory
           mode: 0755
 
      - name: "mosquitto: template $HOME/.config/mosquitto_sub"
        template:
           src: files/mosquitto/mosquitto_sub.j2
-          dest: "{{ lookup('env', 'USER' }}/.config/mosquitto_sub"
+          dest: "{{ lookup('env', 'HOME') }}/.config/mosquitto_sub"
           mode: 0444
 
 #         _                                   _

@@ -1,8 +1,8 @@
 # {{ ansible_managed }}
 --host 127.0.0.1
 --port 1883
---user _lr
---pw {{ lookup('password', '{{ userdata }}/.lr.pw') | mosquitto_passwd }}
+--username _lr
+--pw {{ lookup('password', '{{ userdata }}/.lr.pw') }}
 --id mcli
 --protocol-version mqttv5
 
