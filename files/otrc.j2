@@ -28,10 +28,13 @@
         "willTopic": "",
         "ws": False,
     } %}
-{# basically Android only #}
+{# Android only but iOS ignores these #}
 {% if opencage_apikey is defined %}
-{%     do data["opencageApiKey"] = opencage_apikey %}
-{%     do data["reverseGeocodeProvider"] = "OpenCage" %}
-{%     do data["experimentalFeatures"] = [ "bearingArrowFollowsDeviceOrientation", "showExperimentalPreferenceUI", "useOSMMap" ] %}
+{%   set f = [ "bearingArrowFollowsDeviceOrientation",
+	       "showExperimentalPreferenceUI",
+	       "useOSMMap" ] %}
+{%   set x = data.update({ "opencageApiKey": opencage_apikey }) %}
+{%   set x = data.update({ "reverseGeocodeProvider": "OpenCage" }) %}
+{%   set x = data.update({ "experimentalFeatures": f }) %}
 {% endif %}
 {{ data | to_nice_json }}
