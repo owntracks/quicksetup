@@ -1,2 +1,3 @@
 configuration.yaml
-files/ansible/filter_plugins/__pycache__
+__pycache__
+sundry/
