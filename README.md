@@ -18,6 +18,7 @@ Work in progress
 - ufw firewall with open TCP ports at 22, 80, 443, 8883
 - jq and jo
 - bootstrapping of installation
+- Recorder Views (without requiring basic auth)
 
 ## installation
 
