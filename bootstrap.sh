@@ -8,7 +8,7 @@ fi
 if ! which ansible-playbook > /dev/null; then
 	echo "Attempting to install ansible-core"
 	sudo apt update
-	sudo apt install -qqy ansible-core
+	sudo apt install -qqy ansible
 fi
 
 # people who know Ansible might be questioning some of the practices
