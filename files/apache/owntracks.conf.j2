@@ -19,6 +19,7 @@
 		AuthName "My OwnTracks"
 		AuthUserFile "{{ userdata }}/htpasswd"
 		Require valid-user
+		Satisfy any
 	</Directory>
 
 	# WebSocket URL endpoint
@@ -63,6 +64,7 @@
 		AuthBasicProvider file
 		AuthUserFile "{{ userdata }}/htpasswd"
 		Require valid-user
+		Satisfy any
 	</LocationMatch>
 
 	<Location "/owntracks/pub">
@@ -73,6 +75,7 @@
 		<RequireAll>
 			Require method POST
 			Require valid-user
+			Satisfy any
 		</RequireAll>
 	</Location>
 
