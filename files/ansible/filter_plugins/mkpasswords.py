@@ -12,6 +12,8 @@ def mkpasswords(users, directory):
     ## users.append(dict(tid="rr", username="_rr"))
 
     for u in users:
+        u["username"] = u["username"].lower()
+        u["devicename"] = u["devicename"].lower()
         if not "password" in u:
             # if file exists, read its content (a.k.a password lookup)
             p = os.path.join(directory, u["username"] + ".pass")
