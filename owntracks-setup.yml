@@ -261,6 +261,18 @@
           dest: "/etc/systemd/system/ot-recorder.service.d/override.conf"
           mode: 0444
 
+     - name: "ot-recorder: add keys for users which have them"
+       shell:
+          cmd: >
+             printf "{{ item.username | lower }}-{{ item.devicename | lower }} {{ item.secret }}"
+             | ocat --load=keys
+
+       loop: "{{ friends }}"
+       loop_control:
+           label: "{{ item.username|lower }}-{{ item.devicename|lower }}"
+       when: 'item.secret is defined'
+       tags: web, pw
+
      - name: "ot-recorder: launch service"
        service:
            name: ot-recorder

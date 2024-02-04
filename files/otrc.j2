@@ -28,6 +28,10 @@
         "willTopic": "",
         "ws": False,
     } %}
+{% if item.secret is defined %}
+{%   set x = data.update({ "encryptionKey": item.secret }) %}
+{% endif %}
+{# -- #}
 {# Android only but iOS ignores these #}
 {% if opencage_apikey is defined %}
 {%   set f = [ "bearingArrowFollowsDeviceOrientation",
