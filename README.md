@@ -16,6 +16,7 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 - configuration of any number of friends
   - users are created with random passwords added to files in file system, `htpasswd`, and Mosquitto password file
   - users can download pre-configured [.otrc remote configuration files](https://owntracks.org/booklet/features/remoteconfig/) or click on a URL config for ease of configuration of the apps
+  - optional configuration of a secret key per user for payload encryption
 - optional but recommended configuration of [OpenCageData](https://opencagedata.com/) for reverse geo in Recorder defaults file and in `.otrc` for Android devices. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.) Location data is cached by the Recorder and stored alongside location publishes, served from the API
 - should be able to support a dozen or more friends on a 512MB VPS
 - `mosquitto_pub`/`mosquitto_sub` pre-configured to use local broker with files in `$HOME/.config/`
