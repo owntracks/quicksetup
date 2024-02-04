@@ -6,17 +6,19 @@ Work in progress
 
 - Let's Encrypt certificate enrollment and renewal (cron)
 - MQTT broker (Mosquitto) and HTTP server (Apache) secured with SSL/TLS
-- configured OwnTracks [Recorder](https://github.com/owntracks/recorder)
-- [Frontend](https://github.com/owntracks/frontend)
+- OwnTracks [Recorder](https://github.com/owntracks/recorder)
+  - configured for MQTT
+  - with support for HTTP POST for location publishes from OwnTracks clients
+- configured [Frontend](https://github.com/owntracks/frontend)
 - automatic configuration of friends, each of which can see eachother via MQTT in the apps and on Frontend, etc.
-- users can download pre-configured [.otrc remote configuration files](https://owntracks.org/booklet/features/remoteconfig/) for ease of configuration of the apps
-- users are created with random passwords
-- these same users inserted into `mosquitto.pw`, `mosquitto.acl`, and `htpasswd`
-- optional but recommended [OpenCageData](https://opencagedata.com/) for reverse geo. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.) Location data is cached by the Recorder and stored alongside location publishes, served from the API
+- configuration of any number of friends
+  - users are created with random passwords added to files in file system, `htpasswd`, and Mosquitto password file
+  - users can download pre-configured [.otrc remote configuration files](https://owntracks.org/booklet/features/remoteconfig/) or click on a URL config for ease of configuration of the apps
+- optional but recommended configuration of [OpenCageData](https://opencagedata.com/) for reverse geo in Recorder defaults file and in `.otrc` for Android devices. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.) Location data is cached by the Recorder and stored alongside location publishes, served from the API
 - should be able to support a dozen or more friends on a 512MB VPS
 - `mosquitto_pub`/`mosquitto_sub` pre-configured to use local broker with files in `$HOME/.config/`
 - ufw firewall with open TCP ports at 22, 80, 443, 8883
-- jq and jo
+- `jq(1)` and `jo(1)` commands for working with JSON
 - bootstrapping of installation
 - Recorder Views (without requiring basic auth)
 
