@@ -2,6 +2,8 @@
 
 Using OwnTracks means having to set up and configure your own server, which can be non-trivial. For this reason we have created what we call _quicksetup_, a set of tools which will hopefully get your OwnTracks environment set up as effortlessly as possible.
 
+Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/booklet/guide/quicksetup/)
+
 ## features
 
 - Let's Encrypt certificate enrollment and renewal (cron)
