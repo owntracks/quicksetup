@@ -261,13 +261,12 @@
           dest: "/etc/systemd/system/ot-recorder.service.d/override.conf"
           mode: 0444
 
-     - name: "ot-recorder: add keys for users which have them"
+     - name: "ot-recorder: add/delete keys for users which have them"
        shell:
           cmd: >
-             printf "{{ item.username | lower }}-{{ item.devicename | lower }} {{ item.secret }}"
+             printf "{{ item.username | lower }}-{{ item.devicename | lower }} {{ item.secret|default('DELETE') }}"
              | ocat --load=keys
-
-       loop: "{{ friends | selectattr('secret', 'defined') }}"
+       loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username|lower }}-{{ item.devicename|lower }}"
        tags: web, pw
