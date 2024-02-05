@@ -31,7 +31,7 @@ def mkpasswords(users, directory):
                     with open(file, "r") as f:
                         u["secret"] = f.read().rstrip()
                 else:
-                    raise AnsibleFilterError("mkpasswords: cannot open file {0} for user {1}".format(p, u["username"]))
+                    raise AnsibleFilterError("mkpasswords: cannot open file {0} for user {1}".format(file, u["username"]))
 
 
         newusers.append(u)
