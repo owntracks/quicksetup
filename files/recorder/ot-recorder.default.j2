@@ -43,9 +43,6 @@ OTR_HTTPHOST="127.0.0.1"
 # Port number for the HTTP module to bind to (default: 8083)
 OTR_HTTPPORT=8083
 
-# -----------------------------------------------------
-# Prefix URL to recorder for Tours
-OTR_HTTPPREFIX="https://{{ dns_domain }}/owntracks"
 
 # -----------------------------------------------------
 # optional path to HTTP directory in which to store
@@ -54,11 +51,9 @@ OTR_HTTPPREFIX="https://{{ dns_domain }}/owntracks"
 
 # -----------------------------------------------------
 # API key for reverse-geo lookups
-{% if opencage_apikey is defined %}
-OTR_GEOKEY="opencage:{{ opencage_apikey }}"
-{% else %}
-#OTR_GEOKEY=""
-{% endif %}
+#
+{% if opencage_apikey is defined and opencage_apikey %}OTR_GEOKEY="opencage:{{ opencage_apikey }}"{% endif %}
+
 
 # -----------------------------------------------------
 # Reverse geo precision
@@ -71,4 +66,17 @@ OTR_PRECISION=7
 # -----------------------------------------------------
 # List of topics for MQTT to subscribe to, blank separated in a string
 OTR_TOPICS="owntracks/#"
+
+
+# -----------------------------------------------------
+# Optional LUA script which will be loaded with the Recorder
+#
+
+{% if lua_script is defined and lua_script %}OTR_LUASCRIPT="{{ lua_script }}"{% endif %}
+
+
+# -----------------------------------------------------
+# HTTP prefix for this recorder for accessing Tour views
+#
+OTR_HTTPPREFIX="https://{{ dns_domain }}/owntracks"
 
