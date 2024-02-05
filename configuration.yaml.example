@@ -37,3 +37,11 @@ friends:
   - { tid: "JJ", username: "jane",     devicename: "nokia" }
   - { tid: "AA", username: "ernesto",  devicename: "s10" }
   - { tid: "BB", username: "sue",      devicename: "myphone" }
+
+
+# ---- advanced options below
+
+# Path to an optional Lua script the Recorder should load at
+# startup.
+
+# lua_script: "/path/to/example.lua"
