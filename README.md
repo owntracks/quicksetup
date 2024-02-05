@@ -24,6 +24,8 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 - `jq(1)` and `jo(1)` commands for working with JSON
 - bootstrapping of installation
 - Recorder Views (without requiring basic auth)
+- explicitly no support for:
+   - [MQTT over websockets](https://github.com/owntracks/quicksetup/issues/3), even though our apps support it
 
 ## installation
 
