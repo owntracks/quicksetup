@@ -227,6 +227,7 @@
        apt:
           name: "ot-recorder"
           state: latest
+       notify: restart_recorder
 
      - name: "ot-recorder: template ot-recorder defaults file"
        template:
