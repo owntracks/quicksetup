@@ -33,7 +33,7 @@
 
      - name: "system: install OwnTracks repository"
        apt_repository:
-          repo: deb  http://repo.owntracks.org/debian bookworm main
+          repo: "deb  http://repo.owntracks.org/debian {{ ansible_distribution_release }} main"
           state: present
 
      - name: "system: install required packages"
