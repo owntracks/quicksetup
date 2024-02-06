@@ -84,6 +84,7 @@
        copy:
           content: "{{ item.password | string + '\n' }}"
           dest: "{{ otdir }}/userdata/{{ item.username }}.pass"
+          mode: 0400
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username }}"
@@ -93,6 +94,8 @@
        template:
           src: files/otrc.j2
           dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
+          group: www-data
+          mode: 0440
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username }}"
