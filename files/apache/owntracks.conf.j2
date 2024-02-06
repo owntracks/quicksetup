@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-<VirtualHost *:443>
+<VirtualHost *:{{ (have_acme|int) | ternary(443, 80) }}>
 	ServerName {{ dns_domain }}
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/html
@@ -10,9 +10,11 @@
 
 	#Include conf-available/serve-cgi-bin.conf
 
+{% if (have_acme|int) %}
 	SSLEngine on
 	SSLCertificateFile {{ otdir }}/tls/cert.crt
 	SSLCertificateKeyFile {{ otdir }}/tls/cert.key
+{% endif %}
 
 	<Directory "/var/www/html/owntracks">
 		AuthType Basic

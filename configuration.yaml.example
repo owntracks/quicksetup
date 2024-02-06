@@ -8,8 +8,8 @@
 dns_domain: "owntracks.example.net"
 
 # Specify your email address. We use this when signing up on your
-# behalf to Let's Encrypt and for nothing else.
-#
+# behalf to Let's Encrypt and for nothing else. If you don't
+# configure an email address, we set up without SSL/TLS
 
 email: "you@example.net"
 

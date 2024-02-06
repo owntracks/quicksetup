@@ -19,6 +19,14 @@
         - lua5.4
         - lua-socket
   tasks:
+
+     - name: "detect: acme"
+       set_fact:
+           have_acme: "{{ email is defined | ternary(1, 0) | int }}"
+           scheme: "{{ email is defined | ternary('https', 'http') }}"
+       tags: apa, lego
+
+
 #                 _
 #   ___ _   _ ___| |_ ___ _ __ ___
 #  / __| | | / __| __/ _ \ '_ ` _ \
@@ -101,17 +109,17 @@
        command: dd if=/dev/zero of=/swapfile bs=1M count=2048 creates=/swapfile
        register: swapcreated
        when: ansible_swaptotal_mb < 1
-   
+
      - name: "system: set permissions on swapfile"
        file:
           path: /swapfile
           mode: 0600
        when: swapcreated.changed
-   
+
      - name: "system: mkswap"
        command: mkswap /swapfile
        when: swapcreated.changed and (ansible_swaptotal_mb < 1)
-   
+
      - name: "system: add swapfile to fstab"
        lineinfile:
           dest: /etc/fstab
@@ -119,7 +127,7 @@
           line: "/swapfile none swap sw 0 0"
           state: present
        when: swapcreated.changed and (ansible_swaptotal_mb < 1)
-   
+
      - name: "system: activate swap"
        command: swapon -a
        when: swapcreated.changed
@@ -132,33 +140,32 @@
 #  |_|\___|\__, |\___/
 #          |___/
 
-     - name: "lego: template out certificate/key installer"
-       template:
-          src: files/lego/installcerts.sh.j2
-          dest: "{{ otdir }}/lego/installcerts.sh"
-          mode: 0555
-       tags: lego
+     - block:
+             - name: "lego: template out certificate/key installer"
+               template:
+                  src: files/lego/installcerts.sh.j2
+                  dest: "{{ otdir }}/lego/installcerts.sh"
+                  mode: 0555
 
-     - name: "lego: template out enroller"
-       template:
-          src: files/lego/enroll.sh.j2
-          dest: "{{ otdir }}/lego/enroll.sh"
-          mode: 0555
-       tags: lego
+             - name: "lego: template out enroller"
+               template:
+                  src: files/lego/enroll.sh.j2
+                  dest: "{{ otdir }}/lego/enroll.sh"
+                  mode: 0555
 
-     - name: "lego: enroll at letsencrypt"
-       command:
-          argv:
-             - "{{ otdir }}/lego/enroll.sh"
-       tags: lego
+             - name: "lego: enroll at letsencrypt"
+               command:
+                  argv:
+                     - "{{ otdir }}/lego/enroll.sh"
 
-     - name: "lego: install cron job for letsencrypt renewals"
-       cron:
-          name: letsencrypt-ACME-certificate-renewal
-          minute: "{{ 59 | random(seed=dns_domain) }}"
-          hour: "04"
-          user: root
-          job: "[ -x {{ otdir }}/lego/enroll.sh ] && {{ otdir }}/lego/enroll.sh"
+             - name: "lego: install cron job for letsencrypt renewals"
+               cron:
+                  name: letsencrypt-ACME-certificate-renewal
+                  minute: "{{ 59 | random(seed=dns_domain) }}"
+                  hour: "04"
+                  user: root
+                  job: "[ -x {{ otdir }}/lego/enroll.sh ] && {{ otdir }}/lego/enroll.sh"
+       when: 'have_acme|int'
        tags: lego
 
 
@@ -302,7 +309,7 @@
           src: files/apache/owntracks.conf.j2
           dest: "/etc/apache2/sites-enabled/owntracks.conf"
           mode: 0444
-       tags: web
+       tags: web, apa
        notify: restart_apache
 
      - name: "apache: add users to htpasswd"
