@@ -337,6 +337,12 @@
               mode: 0444
            notify: restart_nginx
 
+#         - name: "nginx: generate dhparam file"
+#           community.crypto.openssl_dhparam:
+#              path: "{{ nginxdir }}/dh4096.pem
+#              size: 4096
+#              mode: 0444
+
          - name: "nginx: create owntracks/ directory in Web root"
            file:
               path: "{{ otweb }}"
