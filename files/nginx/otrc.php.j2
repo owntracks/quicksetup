@@ -1,0 +1,12 @@
+<?php
+	# provide content of a user's .otrc file
+
+	$file = "/usr/local/owntracks/userdata/{$_SERVER['REMOTE_USER']}.otrc";
+
+	header("Content-Description: File Transfer"); 
+	header("Content-Type: application/json"); 
+	header("Content-Disposition: attachment; filename=\"". basename($file) ."\""); 
+
+	readfile ($file);
+	exit(); 
+?>

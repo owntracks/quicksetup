@@ -1,0 +1,112 @@
+# {{ ansible_managed }}
+server {
+
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	server_name  {{ dns_domain }};
+
+	root /var/www/html;
+
+	server_tokens off;
+
+	ssl_certificate {{ otdir }}/tls/cert.crt;
+	ssl_certificate_key {{ otdir }}/tls/cert.key;
+	# ssl_dhparam /etc/nginx/dh4096.pem;
+
+	ssl_session_cache shared:ssl_session_cache:10m;
+	ssl_session_timeout 5m;
+
+	# ssl_session_tickets off;
+	ssl_protocols TLSv1.2 TLSv1.3;
+	ssl_prefer_server_ciphers on;
+
+	ssl_ciphers "ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS";
+
+
+	location / {
+		index  index.html index.htm;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php-fpm.sock;
+	}
+
+	location /owntracks {
+		index  index.php index.html index.htm;
+
+		auth_basic $mysite_hascookie;
+		auth_basic_user_file /usr/local/owntracks/userdata/htpasswd;
+		add_header Set-Cookie "otrauth={{ cookie_value }};max-age=86400;path=/;secure;SameSite=None";
+	}
+
+
+	# Proxy and upgrade WebSocket connection
+	location /owntracks/ws {
+		rewrite ^/owntracks/(.*)    /$1 break;
+		proxy_read_timeout 120s;
+		proxy_pass      http://127.0.0.1:8083;
+		proxy_http_version  1.1;
+		proxy_buffering off;
+		proxy_set_header    Upgrade $http_upgrade;
+		proxy_set_header    Connection "upgrade";
+		proxy_set_header    Host $host;
+		proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+
+	# OwnTracks Recorder Views (requires /view, /static, /utils)
+	location ~ /owntracks/(view|static|utils)/ {
+		rewrite ^/owntracks/(.*)    /$1 break;
+		proxy_buffering         off;            # Chrome
+		proxy_pass              http://127.0.0.1:8083;
+		proxy_http_version      1.1;
+		proxy_set_header        Host $host;
+		proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header        X-Real-IP $remote_addr;
+	}
+
+	location ~ /owntracks/(api|last|map|table)/ {
+		auth_basic $mysite_hascookie;
+		auth_basic_user_file /usr/local/owntracks/userdata/htpasswd;
+		add_header Set-Cookie "otrauth={{ cookie_value }};max-age=86400;path=/;secure;SameSite=None";
+		rewrite ^/owntracks/(.*)    /$1 break;
+		proxy_pass              http://127.0.0.1:8083;
+		proxy_http_version      1.1;
+		proxy_set_header        Host $host;
+		proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header        X-Real-IP $remote_addr;
+	}
+
+#	location /owntracks/static/ {
+#		proxy_pass              http://127.0.0.1:8083/static/;
+#		proxy_http_version      1.1;
+#		proxy_set_header        Host $host;
+#		proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+#		proxy_set_header        X-Real-IP $remote_addr;
+#	}
+#    location /owntracks/utils/ {
+#         proxy_pass              http://127.0.0.1:8083/utils/;
+#         proxy_http_version      1.1;
+#         proxy_set_header        Host $host;
+#         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header        X-Real-IP $remote_addr;
+#    }
+
+	# HTTP Mode
+	location /owntracks/pub {
+		auth_basic "My OwnTracks";
+		auth_basic_user_file /usr/local/owntracks/userdata/htpasswd;
+		proxy_pass              http://127.0.0.1:8083/pub;
+		proxy_http_version      1.1;
+		proxy_set_header        Host $host;
+		proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header        X-Real-IP $remote_addr;
+
+		# Optionally force Recorder to use username from Basic
+		# authentication user. Whether or not client sets
+		# X-Limit-U and/or uses ?u= parameter, the user will
+		# be set to $remote_user.
+		proxy_set_header        X-Limit-U $remote_user;
+	}
+}
+

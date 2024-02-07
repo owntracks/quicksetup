@@ -11,8 +11,8 @@
         - ufw
         - mosquitto
         - mosquitto-clients
-        - apache2-utils
-        - libapache2-mod-php
+        - nginx
+        - php-fpm
         - python3-passlib
         - jq
         - jo
@@ -288,83 +288,62 @@
        service:
            name: ot-recorder
            state: started
-#                          _          
-#    __ _ _ __   __ _  ___| |__   ___ 
-#   / _` | '_ \ / _` |/ __| '_ \ / _ \
-#  | (_| | |_) | (_| | (__| | | |  __/
-#   \__,_| .__/ \__,_|\___|_| |_|\___|
-#        |_|                          
+#               _
+#   _ __   __ _(_)_ __ __  __
+#  | '_ \ / _` | | '_ \\ \/ /
+#  | | | | (_| | | | | |>  <
+#  |_| |_|\__, |_|_| |_/_/\_\
+#         |___/
 
+     - block:
+         - name: "nginx: create idempotent random cookie value"
+           set_fact:
+              cookie_value: "{{ lookup('password', '{{ nginxdir }}/cookie-value.pw') }}"
 
-     - name: "apache: enable required modules"
-       community.general.apache2_module:
-          state: present
-          name: "{{ item }}"
-       loop:
-          - ssl
-          - proxy_wstunnel
-          - proxy_http
-       tags: web
-       notify: restart_apache
+         - name: "nginx: add users to htpasswd"
+           community.general.htpasswd:
+              path: "{{ userdata }}/htpasswd"
+              name: "{{ item.username }}"
+              password: "{{ item.password }}"
+              owner: root
+              group: www-data
+              mode: 0444
+           loop: "{{ friends }}"
+           loop_control:
+               label: "{{ item.username }}"
 
-     - name: "apache: template owntracks site configuration"
-       template:
-          src: files/apache/owntracks.conf.j2
-          dest: "/etc/apache2/sites-enabled/owntracks.conf"
-          mode: 0444
-       tags: web, apa
-       notify: restart_apache
+         - name: "nginx: template owntracks site configuration"
+           template:
+              src: files/nginx/owntracks.conf.j2
+              dest: "{{ nginxdir }}/sites-enabled/owntracks"
+              mode: 0444
 
-     - name: "apache: add users to htpasswd"
-       community.general.htpasswd:
-          path: "{{ userdata }}/htpasswd"
-          name: "{{ item.username }}"
-          password: "{{ item.password }}"
-          owner: root
-          group: www-data
-          mode: 0444
-       loop: "{{ friends }}"
-       loop_control:
-           label: "{{ item.username }}"
-       tags: web
+         - name: "nginx: create owntracks/ directory in Web root"
+           file:
+              path: "{{ otweb }}"
+              state: directory
+              mode: 0755
 
-     - name: "apache: create owntracks/ directory in Web root"
-       file:
-          path: "{{ otweb }}"
-          state: directory
-          mode: 0755
-       tags: web
+         - name: "nginx: install OwnTrack's index.php"
+           template:
+              src: files/nginx/index.php.j2
+              dest: "{{ otweb }}/index.php"
+              mode: 0444
 
-     - name: "apache: install OwnTrack's index.php"
-       template:
-          src: files/apache/index.php.j2
-          dest: "/var/www/html/owntracks/index.php"
-          mode: 0444
-       tags: [ web, web1 ]
+         - name: "nginx: install OwnTrack's otrc.php"
+           template:
+              src: files/nginx/otrc.php.j2
+              dest: "{{ webroot }}/owntracks/otrc.php"
+              mode: 0444
 
-     - name: "apache: install OwnTrack's otrc.php"
-       template:
-          src: files/apache/otrc.php.j2
-          dest: "/var/www/html/owntracks/otrc.php"
-          mode: 0444
-       tags: [ web, web1 ]
+         - name: "nginx: install favicon.ico"
+           copy:
+              src: files/apache/favicon.ico
+              dest: "{{ webroot }}/favicon.ico"
+              mode: 0444
 
-     - name: "apache: overwrite default index.html"
-       copy:
-          content: |
-              <html><head><title>Nope</title></head><body>
-              <pre>nope</pre>
-              </body></html>
-          dest: "/var/www/html/index.html"
-          mode: 0444
-       tags: [ web, web1 ]
-
-     - name: "apache: install favicon.ico"
-       copy:
-          src: files/apache/favicon.ico
-          dest: "/var/www/html/favicon.ico"
-          mode: 0444
-       tags: [ web, web1 ]
+       tags: nginx
+       notify: restart_nginx
 
 #    __                 _                 _ 
 #   / _|_ __ ___  _ __ | |_ ___ _ __   __| |
@@ -409,9 +388,9 @@
            name: mosquitto
            state: restarted
 
-     - name: restart_apache
+     - name: restart_nginx
        service:
-           name: apache2
+           name: nginx
            state: restarted
 
      - name: restart_recorder

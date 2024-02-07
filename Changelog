@@ -1,0 +1,6 @@
+2024-FEB-02: ot-recorder systemd LMdb override size now defaults to new Recorder default
+2024-FEB-04: add support for configuring optional payload encryption for friends
+2024-FEB-05: remove Recorder key for user-device if no longer in configuration.yaml
+2024-FEB-05: add support for an optional Recorder Lua script
+2024-FEB-06: add Lua cli in order to build examples
+2024-FEB-06: preliminary support for configuring sans ACME
