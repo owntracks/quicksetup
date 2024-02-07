@@ -36,10 +36,8 @@ http {
 	# gzip_http_version 1.1;
 	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
-#	map $cookie_thingauth $mysite_hascookie {
 	map $cookie_otrauth $mysite_hascookie {
-#		"COOKIE_VALUE" "off";
-		"jeiH4yie" "off";
+		"{{ cookie_value }}" "off";
 		default "My OwnTracks";
 	}
 
