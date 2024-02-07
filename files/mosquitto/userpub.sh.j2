@@ -8,12 +8,13 @@
 lat=48.85833 
 lon=3.29513
 
+topic="owntracks/{{ friends[0].username}}/{{ friends[0].devicename}}"
 jo _type=location \
       SSID=mywifi \
       batt=$(perl -e 'print int(rand(99) + 1)') \
       lat=$lat \
       lon=$lon \
-      tid=j1 \
+      tid="{{ friends[0].tid }}" \
       tst=$(date +%s) |
-   mosquitto_pub -r -t owntracks/jane/nokia -l
+   mosquitto_pub -r -t "${topic}" -l
 
