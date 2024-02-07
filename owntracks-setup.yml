@@ -19,6 +19,7 @@
         - jo
         - lua5.4
         - lua-socket
+        - python3-paho-mqtt
   tasks:
 
      - name: "detect: acme"
@@ -240,7 +241,7 @@
 
      - name: "mosquitto: template out sample userpub program"
        template:
-          src: files/mosquitto/userpub.sh.j2
+          src: files/mosquitto/userpub.py.j2
           dest: "/usr/local/bin/userpub"
           mode: 0755
 

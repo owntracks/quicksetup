@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+import paho.mqtt.publish as mqtt
+from collections import namedtuple
+import random
+import json
+import time
+
+# this is here simply as a mechanism for automating documentation
+
+# data is from 
+# https://public.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000
+
+Loc = namedtuple('Loc', 'cc city population lat lon')
+
+locations = [
+        Loc("TR", "Diyarbakir"        ,  1791373,    37.91,    40.22 ),
+        Loc("RU", "Kazan"             ,  1243500,    55.79,    49.12 ),
+        Loc("UA", "Kharkiv"           ,  1433886,    49.98,    36.25 ),
+        Loc("BE", "Brussels"          ,  1019022,    50.85,     4.35 ),
+        Loc("BY", "Minsk"             ,  1742124,    53.90,    27.57 ),
+        Loc("TR", "Konya"             ,  1390051,    37.87,    32.48 ),
+        Loc("ES", "Barcelona"         ,  1620343,    41.39,     2.16 ),
+        Loc("UA", "Odesa"             ,  1015826,    46.49,    30.74 ),
+        Loc("DE", "Munich"            ,  1260391,    48.14,    11.58 ),
+        Loc("RU", "Saint Petersburg"  ,  5351935,    59.94,    30.31 ),
+        Loc("FR", "Paris"             ,  2138551,    48.85,     2.35 ),
+        Loc("TR", "Istanbul"          , 14804116,    41.01,    28.95 ),
+        Loc("PL", "Warsaw"            ,  1702139,    52.23,    21.01 ),
+        Loc("TR", "Bursa"             ,  3101833,    40.20,    29.06 ),
+        Loc("DE", "Hamburg"           ,  1845229,    53.55,     9.99 ),
+        Loc("IE", "Dublin"            ,  1024027,    53.33,    -6.25 ),
+        Loc("TR", "Gaziantep"         ,  1808948,    37.06,    37.38 ),
+        Loc("RU", "Voronezh"          ,  1047549,    51.67,    39.18 ),
+        Loc("TR", "Adana"             ,  1779463,    36.99,    35.33 ),
+        Loc("BG", "Sofia"             ,  1152556,    42.70,    23.32 ),
+        Loc("DE", "Berlin"            ,  3426354,    52.52,    13.41 ),
+        Loc("RU", "Rostov-na-Donu"    ,  1130305,    47.23,    39.72 ),
+        Loc("DK", "Copenhagen"        ,  1153615,    55.68,    12.57 ),
+        Loc("IT", "Milan"             ,  1371498,    45.46,     9.19 ),
+        Loc("RU", "Volgograd"         ,  1013533,    48.72,    44.50 ),
+        Loc("TR", "Izmir"             ,  2500603,    38.41,    27.14 ),
+        Loc("ES", "Madrid"            ,  3255944,    40.42,    -3.70 ),
+        Loc("TR", "Ankara"            ,  3517182,    39.92,    32.85 ),
+        Loc("UA", "Kyiv"              ,  2797553,    50.45,    30.52 ),
+        Loc("IT", "Rome"              ,  2318895,    41.89,    12.51 ),
+        Loc("HU", "Budapest"          ,  1741041,    47.50,    19.04 ),
+        Loc("RS", "Belgrade"          ,  1273651,    44.80,    20.47 ),
+        Loc("SE", "Stockholm"         ,  1515017,    59.33,    18.07 ),
+        Loc("RU", "Nizhniy Novgorod"  ,  1259013,    56.33,    44.00 ),
+        Loc("RU", "Moscow"            , 10381222,    55.75,    37.62 ),
+        Loc("RU", "Samara"            ,  1163399,    53.20,    50.15 ),
+        Loc("TR", "Kayseri"           ,  1204641,    38.73,    35.49 ),
+        Loc("GB", "London"            ,  8961989,    51.51,    -0.13 ),
+        Loc("TR", "Antalya"           ,  1344000,    36.91,    30.70 ),
+        Loc("RO", "Bucharest"         ,  1877155,    44.43,    26.11 ),
+        Loc("GB", "Birmingham"        ,  1144919,    52.48,    -1.90 ),
+        Loc("CZ", "Prague"            ,  1165581,    50.09,    14.42 ),
+        Loc("AT", "Vienna"            ,  1691468,    48.21,    16.37 ),
+    ]
+        
+
+topic = "owntracks/{{ friends[0].username}}/{{ friends[0].devicename}}"
+
+city = locations[random.randrange(len(locations))]
+data = {
+    "_type"  : "location",
+    "tst"    : int(time.time()),
+    "lat"    : city.lat,
+    "lon"    : city.lon,
+    "_city"  : "%s.%s" % (city.city, city.cc),
+    "SSID"   : "mywifi",
+    "batt"   : random.randint(1, 100),
+    "tid"    : "{{ friends[0].tid }}",
+}
+
+payload = json.dumps(data)
+print(topic, payload)
+
+mqtt.single(topic, payload=payload, qos=1, retain=True, hostname="localhost",
+    port=1883, transport="tcp")
