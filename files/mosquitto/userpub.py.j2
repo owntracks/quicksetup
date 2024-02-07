@@ -68,14 +68,19 @@ data = {
     "tst"    : int(time.time()),
     "lat"    : city.lat,
     "lon"    : city.lon,
-    "_city"  : "%s.%s" % (city.city, city.cc),
+    "tid"    : "{{ friends[0].tid }}",
+    "_city"  : "%s.%s" % (city.city, city.cc),        # for debugging only; OwnTracks doesn't require this
     "SSID"   : "mywifi",
     "batt"   : random.randint(1, 100),
-    "tid"    : "{{ friends[0].tid }}",
 }
 
 payload = json.dumps(data)
-print(topic, payload)
+# print(topic, payload)
+
+auth = {
+    "username" : "{{ friends[0].username }}",
+    "password" : open("{{ userdata }}/{{ friends[0].username }}.pass", "r").read().rstrip(),
+    }
 
 mqtt.single(topic, payload=payload, qos=1, retain=True, hostname="localhost",
-    port=1883, transport="tcp")
+    auth=auth, port=1883, transport="tcp")
