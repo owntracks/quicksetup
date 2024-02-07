@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 
+# {{ ansible_managed }}
+
+# userpub.py (C)JPMens 2024, OwnTracks
+
 import paho.mqtt.publish as mqtt
 from collections import namedtuple
 import random
 import json
 import time
 
-# this is here simply as a mechanism for automating documentation
-
-# data is from 
+# Publish the location of a random European city with more than 1 million inhabitants.
+# The data is from
 # https://public.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000
 
 Loc = namedtuple('Loc', 'cc city population lat lon')
@@ -58,7 +61,7 @@ locations = [
         Loc("CZ", "Prague"            ,  1165581,    50.09,    14.42 ),
         Loc("AT", "Vienna"            ,  1691468,    48.21,    16.37 ),
     ]
-        
+
 
 topic = "owntracks/{{ friends[0].username}}/{{ friends[0].devicename}}"
 
@@ -82,5 +85,10 @@ auth = {
     "password" : open("{{ userdata }}/{{ friends[0].username }}.pass", "r").read().rstrip(),
     }
 
-mqtt.single(topic, payload=payload, qos=1, retain=True, hostname="localhost",
-    auth=auth, port=1883, transport="tcp")
+mqtt.single(topic, payload=payload,
+    qos=1,
+    retain=True,
+    hostname="localhost",
+    auth=auth,
+    port=1883,
+    transport="tcp")
