@@ -5,6 +5,7 @@
   vars_files:
      - configuration.yaml
   vars:
+     ot_repo: "bookworm"
      packages:
         - lego
         - net-tools
@@ -41,7 +42,7 @@
 
      - name: "system: install OwnTracks repository"
        apt_repository:
-          repo: "deb  http://repo.owntracks.org/debian {{ ansible_distribution_release }} main"
+          repo: "deb  http://repo.owntracks.org/debian {{ ot_repo }} main"
           state: present
 
      - name: "system: install required packages"
@@ -160,6 +161,15 @@
                command:
                   argv:
                      - "{{ otdir }}/lego/enroll.sh"
+
+             - name: "lego: get certificate information"
+               community.crypto.x509_certificate_info:
+                   path: "{{ otdir }}/tls/cert.crt"
+               register: cert
+
+             - name: "lego: display enrolled certificate subject"
+               debug:
+                   msg: "Certificate Subject: {{ cert.subject.commonName }}"
 
              - name: "lego: install cron job for letsencrypt renewals"
                cron:
@@ -299,6 +309,7 @@
          - name: "nginx: create idempotent random cookie value"
            set_fact:
               cookie_value: "{{ lookup('password', '{{ nginxdir }}/cookie-value.pw') }}"
+           notify: restart_nginx
 
          - name: "nginx: add users to htpasswd"
            community.general.htpasswd:
@@ -312,11 +323,19 @@
            loop_control:
                label: "{{ item.username }}"
 
+         - name: "nginx: template nginx.conf"
+           template:
+              src: files/nginx/nginx.conf.j2
+              dest: "{{ nginxdir }}/nginx.conf"
+              mode: 0444
+           notify: restart_nginx
+
          - name: "nginx: template owntracks site configuration"
            template:
-              src: files/nginx/owntracks.conf.j2
+              src: files/nginx/owntracks.j2
               dest: "{{ nginxdir }}/sites-enabled/owntracks"
               mode: 0444
+           notify: restart_nginx
 
          - name: "nginx: create owntracks/ directory in Web root"
            file:
@@ -343,7 +362,6 @@
               mode: 0444
 
        tags: nginx
-       notify: restart_nginx
 
 #    __                 _                 _ 
 #   / _|_ __ ___  _ __ | |_ ___ _ __   __| |

@@ -7,8 +7,8 @@
 
 lego=/usr/bin/lego
 
-systemctl is-active apache2.service > /dev/null &&
-	systemctl stop apache2.service
+systemctl is-active {{ httpserver }}.service > /dev/null &&
+	systemctl stop {{ httpserver }}.service
 
 # change into this directory in which LEGO will create its home (.lego/)
 cd "{{ otdir }}/tls" || { echo "Cannot chdir to {{ otdir }}/tls"; exit 2; }
@@ -33,6 +33,6 @@ else
 		renew \
 		--renew-hook="{{ otdir }}/lego/installcerts.sh"
 
-	systemctl restart apache2.service
+	systemctl restart {{ httpserver }}.service
 fi
 

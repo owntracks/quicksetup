@@ -5,7 +5,7 @@ server {
 	listen [::]:443 ssl;
 	server_name  {{ dns_domain }};
 
-	root /var/www/html;
+	root {{ webroot }};
 
 	server_tokens off;
 
