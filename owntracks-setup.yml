@@ -25,7 +25,7 @@
        set_fact:
            have_acme: "{{ email is defined | ternary(1, 0) | int }}"
            scheme: "{{ email is defined | ternary('https', 'http') }}"
-       tags: apa, lego
+       tags: nginx, lego
 
 
 #                 _
@@ -357,7 +357,7 @@
 
          - name: "nginx: install favicon.ico"
            copy:
-              src: files/apache/favicon.ico
+              src: files/nginx/favicon.ico
               dest: "{{ webroot }}/favicon.ico"
               mode: 0444
 
