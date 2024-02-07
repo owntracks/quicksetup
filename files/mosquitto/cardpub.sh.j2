@@ -1,0 +1,19 @@
+#/bin/sh
+
+# Publish a CARD for the first friend
+# this is here simply as a mechanism for automating
+# documentation; recall the mosquitto clients are
+# autoconfigured at $HOME/.config/mosquitto_[pb]ub
+
+
+topic="owntracks/{{ friends[0].username}}/{{ friends[0].devicename}}/info"
+name="{{ friends[0].username }}"
+tid="{{ friends[0].tid }}"
+face="{{ lookup('file', 'files/mosquitto/assets/logo-owntracks-grayscale-96x96.jpg') | b64encode }}"
+
+jo \
+	_type=card \
+	name="${name} ${tid}" \
+	face="${face}" |
+	mosquitto_pub -r -t "${topic}" -l
+
