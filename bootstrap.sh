@@ -6,7 +6,7 @@ if ! [ -f configuration.yaml ]; then
 fi
 
 if ! which ansible-playbook > /dev/null; then
-	echo "Attempting to install ansible-core"
+	echo "Attempting to install ansible for bootstrapping"
 	sudo apt update
 	sudo apt -qq install -y ansible
 fi
