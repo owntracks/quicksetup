@@ -4,3 +4,5 @@
 2024-FEB-05: add support for an optional Recorder Lua script
 2024-FEB-06: add Lua cli in order to build examples
 2024-FEB-06: preliminary support for configuring sans ACME
+2024-FEB-07: replaced apache by nginx+php-fpm for solving safari auth issue
+2024-FEB-07: userpub, cardpub utilities for demo
