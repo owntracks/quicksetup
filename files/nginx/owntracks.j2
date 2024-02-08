@@ -34,6 +34,9 @@ server {
 	}
 
 	location ~ \.php$ {
+		auth_basic "My OwnTracks";
+		auth_basic_user_file /usr/local/owntracks/userdata/htpasswd;
+
 		include snippets/fastcgi-php.conf;
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
