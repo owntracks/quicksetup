@@ -1,6 +1,10 @@
 # quicksetup
 
-Using OwnTracks means having to set up and configure your own server, which can be non-trivial. For this reason we have created what we call _quicksetup_, a set of tools which will hopefully get your OwnTracks environment set up as effortlessly as possible.
+OwnTracks allows you to keep track of your own location. You can build your private location diary or share it with your family and friends. OwnTracks is open-source and uses open protocols for communication so you can be sure your data stays secure and private.
+
+![Quicksetup will configure this](files/assets/owntracks-quicksetup-arch.png)
+
+The components required to use the free OwnTracks apps are non-trivial to setup. For this reason we have created this project: _quicksetup_ is a set of tools which, when run on a suitable small computer or VPS, will should get your OwnTracks environment set up as comfortably as possible.
 
 Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/booklet/guide/quicksetup/)
 
