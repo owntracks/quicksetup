@@ -4,6 +4,12 @@ Using OwnTracks means having to set up and configure your own server, which can 
 
 Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/booklet/guide/quicksetup/)
 
+## requirements
+
+- VPS (512MB RAM) with Linux. Debian (12) or Ubuntu (Jammy)
+- alternatively, a Raspberry Pi with Raspbian _bookworm_
+- a DNS domain name pointing to the Linux machine
+
 ## features
 
 - Let's Encrypt certificate enrollment and renewal (cron)
