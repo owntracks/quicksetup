@@ -10,14 +10,15 @@ import random
 import json
 import time
 import sys
+import os
 
 # Publish the location of a random European city with more than 1 million inhabitants.
 # The data is from
 # https://public.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000
 
-username = "{{ friends[0].username}}"
-devicename = "{{ friends[0].devicename}}"
-tid = "{{ friends[0].tid}}"
+username   = os.getenv("u", "{{ friends[0].username}}")
+devicename = os.getenv("d", "{{ friends[0].devicename}}")
+tid        = os.getenv("t", "{{ friends[0].tid}}")
 
 Loc = namedtuple('Loc', 'cc city population lat lon')
 
@@ -77,7 +78,7 @@ data = {
     "lat"    : city.lat,
     "lon"    : city.lon,
     "tid"    : tid,
-    "_city"  : "%s.%s" % (city.city, city.cc),        # for debugging only; OwnTracks doesn't require this
+    "_city"  : "%s.%s" % (city.city, city.cc),        # for debugging only
     "SSID"   : "mywifi",
     "batt"   : random.randint(1, 100),
 }
