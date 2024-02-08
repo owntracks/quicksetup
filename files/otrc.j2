@@ -1,35 +1,35 @@
 {% set data = {
-        "_type": "configuration",
-        "allowRemoteLocation": True,
-        "auth": True,
-        "cleanSession": False,
-	"clientId" : item.username + "-" + item.devicename,
-        "cmd": True,
-        "deviceId": item.devicename,
-        "extendedData": True,
+	"_type": "configuration",
+	"allowRemoteLocation": True,
+	"auth": True,
+	"cleanSession": False,
+	"clientId" : item.username|string + "-" + item.devicename|string,
+	"cmd": True,
+	"deviceId": item.devicename|string,
+	"extendedData": True,
 	"mqttProtocolLevel" : 5,
-        "host": dns_domain,
-        "password": item.password,
-        "port": 8883,
-        "positions": 200,
-        "pubQos": 2,
-        "pubRetain": True,
-        "pubTopicBase": "owntracks/" + item.username + "/" + item.devicename,
-	"subTopic" : "owntracks/+/+ owntracks/+/+/event owntracks/+/+/info " + "owntracks/" + item.username + "/" + item.devicename + "/cmd",
-        "ranging": True,
-        "sub": True,
-        "subQos": 2,
-        "tid": item.tid,
-        "tls": True,
-        "usePassword": True,
-        "username": item.username,
-        "willQos": 1,
-        "willRetain": False,
-        "willTopic": "",
-        "ws": False,
+	"host": dns_domain,
+	"password": item.password|string,
+	"port": 8883,
+	"positions": 200,
+	"pubQos": 2,
+	"pubRetain": True,
+	"pubTopicBase": "owntracks/" + item.username|string + "/" + item.devicename|string,
+	"subTopic" : "owntracks/+/+ owntracks/+/+/event owntracks/+/+/info " + "owntracks/" + item.username|string + "/" + item.devicename|string + "/cmd",
+	"ranging": True,
+	"sub": True,
+	"subQos": 2,
+	"tid": item.tid,
+	"tls": True,
+	"usePassword": True,
+	"username": item.username|string,
+	"willQos": 1,
+	"willRetain": False,
+	"willTopic": "",
+	"ws": False,
     } %}
 {% if item.secret is defined %}
-{%   set x = data.update({ "encryptionKey": item.secret }) %}
+{%   set x = data.update({ "encryptionKey": item.secret|string }) %}
 {% endif %}
 {# -- #}
 {# Android only but iOS ignores these #}
@@ -37,7 +37,7 @@
 {%   set f = [ "bearingArrowFollowsDeviceOrientation",
 	       "showExperimentalPreferenceUI",
 	       "useOSMMap" ] %}
-{%   set x = data.update({ "opencageApiKey": opencage_apikey }) %}
+{%   set x = data.update({ "opencageApiKey": opencage_apikey|string }) %}
 {%   set x = data.update({ "reverseGeocodeProvider": "OpenCage" }) %}
 {%   set x = data.update({ "experimentalFeatures": f }) %}
 {% endif %}
