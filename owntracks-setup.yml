@@ -327,6 +327,7 @@
      - name: "ot-recorder: launch service"
        service:
            name: ot-recorder
+           enabled: true
            state: started
 #               _
 #   _ __   __ _(_)_ __ __  __
