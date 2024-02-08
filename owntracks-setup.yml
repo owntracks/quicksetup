@@ -2,8 +2,12 @@
   hosts: localhost
   connection: local
   gather_facts: true
-  vars_files:
-     - configuration.yaml
+  vars_files: configuration.yaml
+  vars_prompt:
+      - name: send_welcome
+        prompt: Shall we publish a test location message when done?
+        private: no
+        default: "n"
   vars:
      ot_repo: "bookworm"
      packages:
@@ -434,6 +438,51 @@
           dest: "{{ otweb }}/frontend/config/config.js"
           mode: 0444
        tags: fe
+
+#                _
+#  __      _____| | ___ ___  _ __ ___   ___ 
+#  \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \
+#   \ V  V /  __/ | (_| (_) | | | | | |  __/
+#    \_/\_/ \___|_|\___\___/|_| |_| |_|\___|
+#
+
+     - block:
+             - name: "welcome: set local variables"
+               set_fact:
+                  my_user: "{{ friends[0].username }}"
+                  my_device: "{{ friends[0].devicename }}"
+                  my_tid: "{{ friends[0].tid }}"
+         
+             - name: "welcome: obtain geo information from ifconfig.co"
+               set_fact:
+                  geo: "{{ lookup('url', 'https://ifconfig.co/json', split_lines=False) | from_json }}"
+         
+             # - debug: var=geo
+         
+             # warning: we require Native Jinja here (set in ansible.cfg)
+             - name: "welcome: construct data for message payload"
+               set_fact:
+                  data:
+                     _type: location
+                     tst: "{{ ansible_date_time.epoch | int }}"
+                     lat: "{{ geo.latitude }}"
+                     lon: "{{ geo.longitude }}"
+                     tid: "{{ my_tid }}"
+                     _city: "{{ geo.city }}.{{ geo.country_iso }}"
+         
+             # - debug: var=data
+             - name: "welcome: publish mqtt welcome message to {{ my_user }}/{{ my_device }}"
+               community.general.mqtt:
+                   topic: "owntracks/{{ my_user }}/{{ my_device }}"
+                   payload: "{{ data | to_json }}"
+                   username: "{{ my_user }}"
+                   password: "{{ lookup('file', '/usr/local/owntracks/userdata/{{ my_user }}.pass') }}"
+                   retain: true
+                   qos: "2"
+                   client_id: ans001
+                   server: "127.0.0.1"
+                   port: 1883
+       when: send_welcome == "y"
 
 #   _                     _ _
 #  | |__   __ _ _ __   __| | | ___ _ __ ___
