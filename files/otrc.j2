@@ -7,7 +7,8 @@
 	"cmd": True,
 	"deviceId": item.devicename|string,
 	"extendedData": True,
-	"mqttProtocolLevel" : 5,
+	"keepalive": 55,
+	"mqttProtocolLevel" : 3, {# FIXME: ios should be 5 #}
 	"host": dns_domain,
 	"password": item.password|string,
 	"port": 8883,
@@ -33,12 +34,13 @@
 {% endif %}
 {# -- #}
 {# Android only but iOS ignores these #}
-{% if opencage_apikey is defined %}
-{%   set f = [ "bearingArrowFollowsDeviceOrientation",
+{% set f = [ "bearingArrowFollowsDeviceOrientation",
 	       "showExperimentalPreferenceUI",
+	       "allowSmallKeepalive",
 	       "useOSMMap" ] %}
+{% if opencage_apikey is defined %}
 {%   set x = data.update({ "opencageApiKey": opencage_apikey|string }) %}
 {%   set x = data.update({ "reverseGeocodeProvider": "OpenCage" }) %}
-{%   set x = data.update({ "experimentalFeatures": f }) %}
 {% endif %}
+{% set x = data.update({ "experimentalFeatures": f }) %}
 {{ data | to_nice_json }}
