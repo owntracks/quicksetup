@@ -7,6 +7,7 @@
 		font-family: 'Arial', sans-serif;
 		color: #818181;
 		font-size: 120%;
+		margin: 20px;
 	}
 
 	h2 {
@@ -19,6 +20,11 @@
 		line-height: 140%;
 		width: 90%;
 	}
+
+	.conf {
+		font-size: 80%;
+	}
+
 
 	pre {
 		white-space:pre-wrap;
@@ -54,8 +60,8 @@
 <h2>My OwnTracks</h2>
 <ul>
 <li><a href="/owntracks/frontend/">Frontend</a></li>
-<li><a href="/owntracks/table/">Table of current positions</a></li>
-<li><a href="/owntracks/last/">Map with live positions</a></li>
+<li><a href="/owntracks/table/">Device table</a></li>
+<li><a href="/owntracks/last/">Live map</a></li>
 
 <!--
 <li><a href="/owntracks/map/index.html?from=2024-02-02T01:24:40&to=2024-02-02T13:24:40&format=geojson&user=jane&device=nokia">Last 12 hours in GeoJSON points</a></li>
@@ -67,8 +73,8 @@
 
 <li style="margin-top: 50px;">To configure your Android or iOS OwnTracks app, either
 <ul>
-	<li>open this page on your device and click on the <a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">URL config</a> which should open in your installed OwnTracks app</li>
-	<li>Download an <a href="otrc.php">otrc file</a> which you send yourself by email, say, and open to launch into OwnTracks. Alternatively copy the file directly off the file system from <code>/usr/local/owntracks/userdata/<?php echo $_SERVER['REMOTE_USER']; ?>.otrc/</code></li>
+	<li class="conf">open this page on your device and click on the <a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">URL config</a> which should open in your installed OwnTracks app</li>
+	<li class="conf">Download an <a href="otrc.php">otrc file</a> which you send yourself by email, say, and open to launch into OwnTracks. Alternatively copy the file directly off the file system from <code>/usr/local/owntracks/userdata/<?php echo $_SERVER['REMOTE_USER']; ?>.otrc/</code></li>
 </ul>
 
 </ul>
