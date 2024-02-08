@@ -367,6 +367,14 @@
               src: files/nginx/index.php.j2
               dest: "{{ otweb }}/index.php"
               mode: 0444
+           tags: page
+
+         - name: "nginx: install OwnTrack's logo into document root"
+           copy:
+              src: files/mosquitto/assets/logo-owntracks-grayscale-96x96.jpg
+              dest: "{{ otweb }}/logo-owntracks-grayscale-96x96.jpg"
+              mode: 0444
+           tags: page
 
          - name: "nginx: install OwnTrack's otrc.php"
            template:

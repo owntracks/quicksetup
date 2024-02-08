@@ -5,17 +5,21 @@
 		height: 100%;
 		min-height: 100%;
 		font-family: 'Arial', sans-serif;
-		color: #478db2;
+		// color: #478db2;
+		// logo is #818181
+		color: #000;
+		font-size: 120%;
 	}
 
 	h2 {
-		font-size: 18px;
+		font-size: 120%;
 	}
 
 	p, ul {
 		text-align: left;
-		padding-top: 25px;
 		margin: 15px;
+		line-height: 140%;
+		width: 90%;
 	}
 
 	pre {
@@ -27,8 +31,27 @@
 	}
 
 	a { text-decoration:  underline; color: inherit;}
+
+	img {
+		width: 96;
+		height: 96;
+		position: absolute;
+		right:0;
+		top:0;
+	}
+	div {
+		position: absolute;
+		left: 0;
+		top: 20px;
+		background-color: white;
+		width: 90%;
+	}
 </style>
 </head>
+<body>
+<div id="logo">
+	<img src="logo-owntracks-grayscale-96x96.jpg" alt="OwnTracks" />
+</div>
 
 <h2>My OwnTracks</h2>
 <ul>
@@ -43,16 +66,15 @@
 <!--
 <li><a href="/owntracks/api/0/locations?from=2023-12-17&to=2023-12-21&format=geojsonpoi&user=jane&device=phone">Points of Interest from past month</a></li>
 -->
+
+<li style="margin-top: 50px;">To configure your Android or iOS OwnTracks app, either
+<ul>
+	<li>open this page on your device and click on the <a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">URL config</a> which should open in your installed OwnTracks app</li>
+	<li>Download an <a href="otrc.php">otrc file</a> which you send yourself by email, say, and open to launch into OwnTracks. Alternatively copy the file directly off the file system from <code>/usr/local/owntracks/userdata/<?php echo $_SERVER['REMOTE_USER']; ?>.otrc/</code></li>
 </ul>
 
-<h2>configuration</h3>
-<p>
-  There are two methods to configure your Android or iOS OwnTracks app; either should work:
-</p>
-<ul>
-<li>Click on the <a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">URL config</a> which should open in your installed OwnTracks app</li>
-<li>Download an <a href="otrc.php">otrc file</a> which you send yourself by email, say, and open to launch into OwnTracks. Alternatively you can copy the file directly off the file system from <code>{{ userdata }}/<?php echo $_SERVER['REMOTE_USER']; ?>.otrc/</code></li>
 </ul>
+</li>
 
 </html>
 
@@ -64,3 +86,5 @@ function remoteconf($username) {
 	echo("owntracks:///config?inline={$config}");
 }
 ?>
+</body>
+</html>
