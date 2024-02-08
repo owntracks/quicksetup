@@ -22,6 +22,23 @@
         - python3-paho-mqtt
   tasks:
 
+     - name: "display some system information"
+       debug:
+           msg: "{{ item }}"
+       loop:
+           - "Ansible version: {{ ansible_version.full }}"
+           - "OS distro: {{ ansible_distribution }} / {{ ansible_distribution_major_version }} {{ ansible_distribution_minor_version }}"
+           - "OS distribution: {{ ansible_distribution_release }}"
+
+     - name: "verify some requirements"
+       assert:
+           that:
+             - "ansible_version.full is version('2.4', '>=')"
+             - "ansible_distribution_release in [ 'bookworm' ]"
+             - "'community.general.ufw' is community.general.a_module"
+             - "'community.general.htpasswd' is community.general.a_module"
+             # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"
+
      - name: "detect: acme"
        set_fact:
            have_acme: "{{ email is defined | ternary(1, 0) | int }}"
