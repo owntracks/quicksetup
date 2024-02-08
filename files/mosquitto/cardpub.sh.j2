@@ -17,7 +17,7 @@ face="{{ lookup('file', 'files/mosquitto/assets/logo-owntracks-grayscale-96x96.j
 
 jo \
 	_type=card \
-	name="${name} ${tid}" \
+	name="${name}" \
 	face="${face}" |
 	mosquitto_pub -r -t "${topic}" -l
 
