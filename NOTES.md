@@ -11,4 +11,14 @@
    - passwords are, again in clear, written to `*.otrc` for device configuration
    - a password for a _local reader_ `_lr` is stored there and in the first friend's `~/.config/mosquitto_[ps]ub`
    - solutions? many probably, but most too unpractical?
--
+   - passwords are hashed for _nginx_ and are managed idempotently
+     ```console
+     $ head -1 /usr/local/owntracks/userdata/htpasswd
+     jane:$apr1$JoJGeeu.$E02WF5lv97aX6vqzwboCo1
+     ```
+   - passwords are hashed for _Mosquitto_ and are resalted at each `./bootstrap.sh`
+     ```console
+     $ head -1 /etc/mosquitto/mosquitto.pw
+     jane:$7$101$JCER9MacrEgNIBgK$EY+qYeAoeer3Fp4KOFPSy+tu2+JjTpQHCjZzFJqnhOCH2EPyvmy8e50HLyIDKodqKO2Eln6i4/wbIW8/V/LG+g==
+     ```
+- we use _lego_ for ACME enrollment b/c we've had very good experience with it (admittedly mostly with `dns-01` challenge). _cron_ is configured to run the enroller which _stops_ _nginx_ during the short window it takes to renew a certificate.
