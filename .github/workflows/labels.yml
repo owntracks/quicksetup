@@ -1,0 +1,47 @@
+# invented by @simonw
+# via https://github.com/simonw/create-labels-workflow/blob/main/.github/workflows/labels.yml
+name: Update repository labels
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - '.github/workflows/labels.yml'
+
+jobs:
+  create-labels:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      LABELS_JSON: |
+        [
+          {"name": "research", "color": "ededed", "description": "Research needed"},
+          {"name": "ops", "color": "c2e0c6", "description": "Ops task"},
+          {"name": "demo", "color": "bfdadc", "description": "Demo label"}
+        ]
+    steps:
+    - uses: actions/github-script@v7
+      with:
+        script: |
+          const labels = JSON.parse(process.env.LABELS_JSON);
+          for (const label of labels) {
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: label.name,
+                description: label.description || '',
+                color: label.color
+              });
+            } catch (error) {
+              // Check if the error is because the label already exists
+              if (error.status === 422) {
+                console.log(`Label '${label.name}' already exists. Skipping.`);
+              } else {
+                // Log other errors
+                console.error(`Error creating label '${label.name}': ${error}`);
+              }
+            }
+          }
