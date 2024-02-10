@@ -10,6 +10,7 @@
 	"deviceId": d,
 	"extendedData": True,
 	"keepalive": 55,
+	"mode" : (item.httpmode is defined and item.httpmode) | ternary(3, 0),
 	"mqttProtocolLevel" : 3,
 	"host": dns_domain,
 	"password": item.password|string,
