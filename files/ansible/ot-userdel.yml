@@ -1,0 +1,47 @@
+- name: Delete username/device from OwnTracks Recorder
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files: ../../configuration.yaml
+  vars:
+      store: "/var/spool/owntracks/recorder/store/"
+  vars_prompt:
+      - name: username
+        prompt: Which user do you want to delete?
+        private: no
+      - name: devicename
+        prompt: Which device for the user  do you want to delete?
+        private: no
+  tasks:
+
+     - block:
+         - name: "normalize friend - device"
+           set_fact:
+                userdev: "{{ item.username|lower }}-{{ item.devicename|lower }}"
+                nusername: "{{ item.username }}"
+                ndevicename: "{{ item.devicename }}"
+           loop: "{{ friends }}"
+           loop_control:
+               label: "{{ item.username }}-{{ item.devicename }}"
+           when: item.username|lower == username|lower and item.devicename|lower == devicename|lower
+
+         - name: "what do we have?"
+           debug: msg="{{ nusername }} - {{ ndevicename }}"
+
+         - name: "recorder: remove last file for {{ userdev }}"
+           file:
+              path: "{{ store }}/last/{{ nusername|lower }}/{{ ndevicename|lower }}"
+              state: absent
+
+         - name: "recorder: remove rec directory for {{ userdev }}"
+           file:
+              path: "{{ store }}/rec/{{ nusername|lower }}/{{ ndevicename|lower }}"
+              state: absent
+
+         - name: "recorder: delete secret for {{ userdev }}"
+           shell:
+              cmd: >
+                 printf "{{ userdev }} DELETE" | ocat --load=keys
+
+# TODO: remove *.pass, *.otrc?
+# TODO: how to remove from configuratoin.yaml

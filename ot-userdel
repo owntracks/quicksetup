@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+if ! [ -f configuration.yaml ]; then
+	echo "I cannot find configuration.yaml" >&2
+	exit 2
+fi
+
+ADIR=/usr/local/owntracks/ansible
+
+if ! [ -x $ADIR/bin/ansible-playbook ]; then
+	echo "bootstrap.sh has not yet installed ansible" >&2
+	exit 2
+fi
+
+export ANSIBLE_CONFIG=files/ansible/ansible.cfg
+
+/usr/local/owntracks/ansible/bin/ansible-playbook files/ansible/ot-userdel.yml "$@"
