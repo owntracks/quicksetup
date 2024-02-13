@@ -28,20 +28,33 @@
          - name: "what do we have?"
            debug: msg="{{ nusername }} - {{ ndevicename }}"
 
-         - name: "recorder: remove last file for {{ userdev }}"
+         - name: "recorder: remove {{ item }} data files file for {{ userdev }}"
            file:
-              path: "{{ store }}/last/{{ nusername|lower }}/{{ ndevicename|lower }}"
+              path: "{{ store }}/{{ item }}/{{ nusername|lower }}/{{ ndevicename|lower }}"
               state: absent
-
-         - name: "recorder: remove rec directory for {{ userdev }}"
-           file:
-              path: "{{ store }}/rec/{{ nusername|lower }}/{{ ndevicename|lower }}"
-              state: absent
+           loop: [ "card", "config", "last", "photos", "rec", "waypoints" ]
 
          - name: "recorder: delete secret for {{ userdev }}"
            shell:
               cmd: >
                  printf "{{ userdev }} DELETE" | ocat --load=keys
+
+         - name: "recorder: clear {{ userdev }} from MQTT"
+           community.general.mqtt:
+              topic: "{{ item }}"
+              payload: None
+              username: "{{ nusername }}"
+              password: "{{ lookup('file', '/usr/local/owntracks/userdata/{{ nusername }}.pass') }}"
+              retain: true
+              qos: "2"
+              client_id: ans002
+              server: "127.0.0.1"
+              port: 1883
+           loop:
+              - "owntracks/{{ nusername }}/{{ ndevicename }}"
+              - "owntracks/{{ nusername }}/{{ ndevicename }}/cmd"
+              - "owntracks/{{ nusername }}/{{ ndevicename }}/info"
+
 
 # TODO: remove *.pass, *.otrc?
 # TODO: how to remove from configuratoin.yaml
