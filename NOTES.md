@@ -1,7 +1,8 @@
 # implementation notes
 
 - `bootstrap.sh` is a simple shell script which installs Ansible and launches our main playbook.
-- we install ansible-core plus needed collections into a dedicated user and directory at /usr/local/owntracks/ansible
+   - create a dedicated user `ansible`
+   - install ansible-core plus needed collections into a virtualenv at /usr/local/owntracks/ansible
 - people who know Ansible might be questioning some of the practices here such as why not use and `ansible.cfg` right in the main directory, or why are templates not in a `templates` directory. The main idea is to hide as much of the internals from users as possible. We do this in order to make things look simple, maybe even simpler than they are.
 - the configuration ([configuration.yaml.example](configuration.yaml.example)) is, again, supposed to be as simple as possible, and we chose this syntax to make it a) easy to integrate in Ansible, and b) hopefully easy to edit for users who'll be using this.
 - wherever possible we have chosen what we believe are sensible defaults.
