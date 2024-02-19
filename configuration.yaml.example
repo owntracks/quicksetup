@@ -32,6 +32,8 @@ email: "you@example.net"
 # are generated and stored at /usr/local/owntracks/userdata/*.pass
 # on this system.
 #
+# Note: all username values MUST currently be different even if
+#       a single user has more than one device.
 
 friends:
   - { tid: "JJ", username: "jane",     devicename: "nokia" }
