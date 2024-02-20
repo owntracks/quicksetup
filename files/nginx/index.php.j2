@@ -26,6 +26,19 @@
 		font-size: 80%;
 	}
 
+	table {
+		border: 1px solid black;
+		table-layout: fixed;
+		width: 80%
+	}
+	th, td {
+		border: 1px solid black;
+		overflow: hidden;
+	}
+
+	.cen {
+		text-align: center;
+	}
 
 	pre {
 		white-space:pre-wrap;
@@ -72,24 +85,60 @@
 <li><a href="/owntracks/api/0/locations?from=2023-12-17&to=2023-12-21&format=geojsonpoi&user=jane&device=phone">Points of Interest from past month</a></li>
 -->
 
-<li style="margin-top: 50px;">To configure your Android or iOS OwnTracks app, either
-<ul>
-	<li class="conf">open this page on your device and <a href="<?php remoteconf($_SERVER['REMOTE_USER']); ?>">configure it with a click</a></li>
-	<li class="conf">download an <a href="otrc.php">otrc file</a> which you send yourself by email, say, and open to launch into OwnTracks</li>
-	<li class="conf">copy the file <code>/usr/local/owntracks/userdata/<?php echo $_SERVER['REMOTE_USER']; ?>.otrc</code></li>
-</ul>
-
-</ul>
 </li>
+
+<li style="margin-top: 50px;">You (<code><?php echo $_SERVER['REMOTE_USER']; ?></code
+>) have the following devices to configure:
+        <p class="conf">
+        To configure your Android or iOS OwnTracks app, open this page on the device
+and either click on the URLencode or download an <code>.otrc</code> file and send it
+by email, say, to the device.
+<ul>
+<table class="devicetable">
+<colgroup>
+    <col style="width:40%">
+    <col style="width:30%">
+    <col style="width:30%">
+  </colgroup>
+<tr>
+        <th>device</th>
+        <th class='cen'>URLconfig</th>
+        <th>OTRC file</th>
+</tr>
+<tbody>
+<?php
+        $user = $_SERVER['REMOTE_USER'];
+        $userdata = "/usr/local/owntracks/userdata/";
+
+        $otrcs = array_map('basename', glob($userdata . "${user}*.otrc"));
+        foreach ($otrcs as $f) {
+		$path = "$userdata/$f";
+		$o = json_decode(file_get_contents($path), false);
+		$d = $o->{"deviceId"};
+		$otrc = strtolower("${user}-${d}.otrc");
+		// print("<li class='conf'><span class='devname'>$d</span> <a href='" . remoteconf($user, $d) .  "'>URLconfig</a> or download <a href=''>${user}-${d}.otrc</a></li>");
+		print("<tr>");
+		print("<td>$d</td>");
+		print("<td class='cen'><a href='" . remoteconf($user, $d) .  "'>click</a></td>");
+		$file = strtolower("otrc.php?d=$d");
+		print("<td><a href='$file'>$d</a></td>");
+		print("</tr>");
+	}
+?>
+</tbody>
+</table>
+</li>
+</ul>
 
 </html>
 
 <?php
-function remoteconf($username) {
-	$fname = "/usr/local/owntracks/userdata/{$username}.otrc";
+function remoteconf($username, $device) {
+	$fname = strtolower("/usr/local/owntracks/userdata/{$username}-{$device}.otrc");
 	$data = file_get_contents($fname);
 	$config= base64_encode($data);
-	echo("owntracks:///config?inline={$config}");
+
+	return("owntracks:///config?inline={$config}");
 }
 ?>
 </body>

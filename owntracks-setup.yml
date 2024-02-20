@@ -106,7 +106,7 @@
           content: "{{ item.password | string + '\n' }}"
           dest: "{{ otdir }}/userdata/{{ item.username }}.pass"
           mode: 0400
-       loop: "{{ friends }}"
+       loop: "{{ friends | sort(attribute='username') | unique }}"
        loop_control:
            label: "{{ item.username }}"
        tags: web
@@ -114,12 +114,12 @@
      - name: "system: generate user .otrc files in userdata"
        template:
           src: files/otrc.j2
-          dest: "{{ otdir }}/userdata/{{ item.username }}.otrc"
+          dest: "{{ otdir }}/userdata/{{ item.username|lower }}-{{ item.devicename|lower }}.otrc"
           group: www-data
           mode: 0440
        loop: "{{ friends }}"
        loop_control:
-           label: "{{ item.username }}"
+           label: "{{ item.username|lower }}-{{ item.devicename|lower }}"
        tags: web
 
 #                            __ _ _

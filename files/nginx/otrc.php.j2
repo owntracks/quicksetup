@@ -1,12 +1,22 @@
 <?php
-	# provide content of a user's .otrc file
+	# provide content of a logged-in user's .otrc file
 
-	$file = "/usr/local/owntracks/userdata/{$_SERVER['REMOTE_USER']}.otrc";
+	// $u = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['u']);
+	$u = $_SERVER['REMOTE_USER'];
+	$d = preg_replace('/[^-a-zA-Z0-9_]/', '', $_GET['d']);
 
-	header("Content-Description: File Transfer"); 
-	header("Content-Type: application/json"); 
-	header("Content-Disposition: attachment; filename=\"". basename($file) ."\""); 
+	if (empty($u) || empty($d)) {
+		die("nope");
+	}
 
-	readfile ($file);
-	exit(); 
+	$file = "/usr/local/owntracks/userdata/${u}-${d}.otrc";
+	if (file_exists($file)) {
+
+		header("Content-Description: File Transfer");
+		header("Content-Type: application/json");
+		header("Content-Disposition: attachment; filename=\"". basename($file) ."\"");
+
+		readfile ($file);
+	}
+	exit();
 ?>
