@@ -1,9 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # enroll or update an ACME certificate using LEGO
 
 # if we don't yet have a certificate, enroll, else renew.
 # stop the Web server, as LEGO will launch its own.
+
+# all output to file and begin with a datestamp
+
+exec > >(tee -a /tmp/lego.log) 2>&1
+
+TZ=UTC date +%FT%T
 
 lego=/usr/bin/lego
 
