@@ -6,6 +6,6 @@
 #}
 recorder:{{ lookup('password', '{{ userdata }}/recorder.pw') | mosquitto_passwd }}
 _lr:{{ lookup('password', '{{ userdata }}/.lr.pw') | mosquitto_passwd }}
-{% for u in friends %}
+{% for u in friends | list | unique(case_sensitive=false, attribute='username') %}
 {{ u.username }}:{{ u.password | string | mosquitto_passwd }}
 {% endfor %}

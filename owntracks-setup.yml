@@ -106,7 +106,7 @@
           content: "{{ item.password | string + '\n' }}"
           dest: "{{ otdir }}/userdata/{{ item.username }}.pass"
           mode: 0400
-       loop: "{{ friends | sort(attribute='username') | unique }}"
+       loop: "{{ friends | unique(case_sensitive=false, attribute='username') }}"
        loop_control:
            label: "{{ item.username }}"
        tags: web
@@ -352,7 +352,7 @@
               owner: root
               group: www-data
               mode: 0444
-           loop: "{{ friends }}"
+           loop: "{{ friends | unique(case_sensitive=false, attribute='username') }}"
            loop_control:
                label: "{{ item.username }}"
 
