@@ -25,6 +25,7 @@
         - lua-socket
         - python3-paho-mqtt
         - logrotate
+        - python3-cryptography
   tasks:
 
      - name: "system: template out sys.info"
