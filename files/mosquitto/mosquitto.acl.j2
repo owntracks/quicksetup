@@ -22,10 +22,10 @@ topic write owntracks/+/+
 #}
 
 #----------------------------
-{% for u in friends|list %}
-user {{ u.username }}
+{% for u in friends|list|map(attribute='username')|unique %}
+user {{ u }}
 {# topic read $SYS/# #}
-topic readwrite owntracks/{{ u.username }}/#
+topic readwrite owntracks/{{ u }}/#
 topic read owntracks/+/+
 topic read owntracks/+/+/event
 topic read owntracks/+/+/info
