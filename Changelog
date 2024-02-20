@@ -6,3 +6,12 @@
 2024-FEB-06: preliminary support for configuring sans ACME
 2024-FEB-07: replaced apache by nginx+php-fpm for solving safari auth issue
 2024-FEB-07: userpub, cardpub utilities for demo
+2024-FEB-08: add $SYS/# to mosquitto ACL for _lr
+2024-FEB-08: optionally send 'welcome' MQTT location publish to first friend
+2024-FEB-09: remove -v from ~/.config/mosquitto_sub
+2024-FEB-10: add support for http in otrc; mode is configured to 0 or 3
+2024-FEB-10: otrc defaults (for Android) to OSM map
+2024-FEB-11: install ansible from pip package (core + needed collections)
+2024-FEB-16: otrc gets +follow waypoint
+2024-FEB-20: support multiple devices per user
+2024-FEB-20: lego enroller / renewer logs to /tmp/lego.log
