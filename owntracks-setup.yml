@@ -24,6 +24,7 @@
         - lua5.4
         - lua-socket
         - python3-paho-mqtt
+        - logrotate
   tasks:
 
      - name: "system: template out sys.info"
