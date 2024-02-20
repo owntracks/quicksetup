@@ -13,6 +13,7 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 - VPS (512MB RAM) with Linux. Debian (12) or Ubuntu (Jammy)
 - alternatively, a Raspberry Pi with Raspbian _bookworm_
 - a DNS domain name pointing to the Linux machine
+- three open TCP ports (80, 443, 8883)
 
 ## features
 
@@ -63,7 +64,7 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 
 3. Launch the installer which will install packages and configure services.
    ```console
-   $ ./bootstrap.sh
+   $ sudo ./bootstrap.sh
    ```
 
 If you later decide you wish to add a friend to `configuration.yaml`, just run the installer again: `./bootstrap.sh`.
