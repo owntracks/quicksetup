@@ -5,6 +5,10 @@ from ansible.errors import AnsibleFilterError
 import secrets
 import os
 
+# make a note of first seen users and their passwords; more than one
+# configuration entry for the same user will re-use its first password
+seen_users = {}
+
 def mkpasswords(users, directory):
     newusers = []
 
@@ -13,6 +17,7 @@ def mkpasswords(users, directory):
     ## users.append(dict(tid="rr", username="_rr"))
 
     for u in users:
+        low_u = u["username"].lower()
         if not "password" in u:
             # if file exists, read its content (a.k.a password lookup)
             p = os.path.join(directory, u["username"] + ".pass")
@@ -21,6 +26,10 @@ def mkpasswords(users, directory):
                     u["password"] = f.read().rstrip()
             else:
                 u["password"] = secrets.token_urlsafe(16)
+        if low_u in seen_users:
+            u["password"] = seen_users[low_u]
+
+        seen_users[low_u] = u["password"]
 
         if "secret" in u:
             ''' if the encryptionKey secret begins with a slash, it's
