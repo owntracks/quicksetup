@@ -110,7 +110,7 @@ by email, say, to the device.
         $user = $_SERVER['REMOTE_USER'];
         $userdata = "/usr/local/owntracks/userdata/";
 
-        $otrcs = array_map('basename', glob($userdata . "${user}*.otrc"));
+        $otrcs = array_map('basename', glob($userdata . "${user}-*.otrc"));
         foreach ($otrcs as $f) {
 		$path = "$userdata/$f";
 		$o = json_decode(file_get_contents($path), false);
