@@ -3,11 +3,6 @@
   connection: local
   gather_facts: true
   vars_files: configuration.yaml
-  vars_prompt:
-      - name: send_welcome
-        prompt: Shall we publish a test location message when done?
-        private: no
-        default: "y"
   vars:
      ot_repo: "bookworm"
      packages:
@@ -440,33 +435,6 @@
           dest: "{{ otweb }}/frontend/config/config.js"
           mode: 0444
        tags: fe
-
-#                _
-#  __      _____| | ___ ___  _ __ ___   ___ 
-#  \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \
-#   \ V  V /  __/ | (_| (_) | | | | | |  __/
-#    \_/\_/ \___|_|\___\___/|_| |_| |_|\___|
-#
-
-     - block:
-             - name: "welcome: template out welcome.py"
-               template:
-                  src: files/mosquitto/welcome.py.j2
-                  dest: "/usr/local/bin/welcome.py"
-                  mode: 0555
-
-             - name: "welcome: set local variables"
-               set_fact:
-                  my_user: "{{ friends[0].username }}"
-                  my_device: "{{ friends[0].devicename }}"
-                  my_tid: "{{ friends[0].tid }}"
-         
-             - name: "welcome: publish mqtt welcome message to {{ my_user }}/{{ my_device }}"
-               command:
-                  argv:
-                     - "/usr/local/bin/welcome.py"
-       when: send_welcome in [ "y", "Y" ]
-       tags: welcome
 
 #   _                     _ _
 #  | |__   __ _ _ __   __| | | ___ _ __ ___

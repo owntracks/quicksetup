@@ -17,3 +17,5 @@
 2024-FEB-20: lego enroller / renewer logs to /tmp/lego.log
 2024-FEB-20: installing logrotate to ensure mosquitto.log is rotated (config is in place)
 2024-FEB-21: otrc files of one user use password of first configured user
+2024-FEB-21: remove welcome feature which was cute but just cute
+
