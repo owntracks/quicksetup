@@ -18,6 +18,7 @@
         - jo
         - lua5.4
         - lua-socket
+        - lua-sec
         - python3-paho-mqtt
         - logrotate
         - python3-cryptography
