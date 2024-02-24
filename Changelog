@@ -20,3 +20,4 @@
 2024-FEB-21: remove welcome feature which was cute but just cute
 2024-FEB-23: add lua-sec package for lua ssl https
 2024-FEB-24: add support for friend-specific MQTT ACLs
+2024-FEB-24: add support for mostly removing friend/device (ot-userdel)

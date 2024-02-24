@@ -25,6 +25,13 @@
                label: "{{ item.username }}-{{ item.devicename }}"
            when: item.username|lower == username|lower and item.devicename|lower == devicename|lower
 
+         - name: "verify we found user / device"
+           assert:
+              that:
+                 - "nusername is defined"
+                 - "ndevicename is defined"
+
+
          - name: "what do we have?"
            debug: msg="{{ nusername }} - {{ ndevicename }}"
 
@@ -55,6 +62,10 @@
               - "owntracks/{{ nusername }}/{{ ndevicename }}/cmd"
               - "owntracks/{{ nusername }}/{{ ndevicename }}/info"
 
-
-# TODO: remove *.pass, *.otrc?
-# TODO: how to remove from configuratoin.yaml
+         - name: "userdata: remove {{ item }} userdata files file for {{ userdev }}"
+           file:
+              path: "{{ userdata }}/{{ item }}"
+              state: absent
+           loop: 
+              - "{{ nusername|lower }}-{{ ndevicename|lower }}.otrc"
+              # must not remove *.pass as their might be multiple devices for $user
