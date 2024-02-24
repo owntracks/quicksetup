@@ -21,13 +21,7 @@ topic write owntracks/#
 topic write owntracks/+/+
 #}
 
-#----------------------------
-{% for u in friends|list|map(attribute='username')|unique %}
-user {{ u }}
-{# topic read $SYS/# #}
-topic readwrite owntracks/{{ u }}/#
-topic read owntracks/+/+
-topic read owntracks/+/+/event
-topic read owntracks/+/+/info
-
+# -- configured users -------------------------------------
+{% for f in friends | unique(case_sensitive=false, attribute='username') %}
+{{ f.username | mqtt_acl() }}
 {% endfor %}
