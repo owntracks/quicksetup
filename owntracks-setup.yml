@@ -213,6 +213,7 @@
           src: files/mosquitto/owntracks.conf.j2
           dest: "{{ mosquittodir }}/conf.d/owntracks.conf"
           mode: 0444
+          # validate: "mosquitto --test-config " # FIXME: in 2.1
        notify: restart_mosquitto
 
      - name: "mosquitto: build mosquitto.pw password file from user passwords"
@@ -236,6 +237,7 @@
        template:
           src: files/mosquitto/mosquitto.acl.j2
           dest: "{{ mosquittodir }}/mosquitto.acl"
+          # validate: "mosquitto --test-config " # FIXME: in 2.1
        notify: restart_mosquitto
 
      - name: "mosquitto: ensure $HOME/.config/ exists"
