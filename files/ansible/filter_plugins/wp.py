@@ -1,38 +1,43 @@
 from ansible.errors import AnsibleFilterError
 from string import Template
 import os
-import json
+import yaml
 
 # wp, (C)2024 by Jan-Piet Mens <jp@mens.de>
-# Ansible Jinja filter to test if a file waypoints/username.json or
-# waypoints/username.otrw can be read. If so, the array of waypoints from either
+# Ansible Jinja filter to test if a file waypoints/username.json, username.yaml, or
+# username.otrw can be read. If so, the array of waypoints from either
 # is read and merged into the list of waypoints contained in
 # `data'.
 
-def wp(data, username):
+def load_file(username, filetype):
 
-    new_waypoints = []
-
-    path = os.path.join("waypoints", "%s.json" % username)
+    data = []
+    path = os.path.join("waypoints", "%s.%s" % (username, filetype))
     if os.path.exists(path):
         with open(path, "r") as f:
             try:
-                new_waypoints = json.loads(f.read())
-            except:
-                raise AnsibleFilterError("Cannot parse JSON from %s" % path)
+                data = yaml.safe_load(f)
+                if filetype == "otrw":
+                    if type(data) == dict and "waypoints" not in data and data.get("_type", "unknown") != "waypoints":
+                        raise AnsibleFilterError("Not an OTRW file in %s" % path)
+                    else:
+                        data = data["waypoints"]
 
-    path = os.path.join("waypoints", "%s.otrw" % username)
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            try:
-                d = json.loads(f.read())
-                if "waypoints" not in d and d.get("_type", "unknown") != "waypoints":
-                    raise AnsibleFilterError("Not an OTRW file in %s" % path)
-                new_waypoints = new_waypoints + d["waypoints"]
             except:
-                raise AnsibleFilterError("Cannot parse OTRW from %s" % path)
+                raise AnsibleFilterError("Cannot load %s from %s" % (filetype, path))
 
-    return data + new_waypoints
+    return data
+
+def wp(waypoints, username):
+
+    additional_wp = []
+
+    for filetype in [ "json", "otrw", "yaml" ]:
+        wps = load_file(username, filetype)
+        if wps is not None:
+            additional_wp = additional_wp + wps
+
+    return waypoints + additional_wp
 
 
 class FilterModule(object):
