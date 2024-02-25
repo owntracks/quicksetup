@@ -59,4 +59,5 @@
 {%   set x = data.update({ "reverseGeocodeProvider": "OpenCage" }) %}
 {% endif %}
 {% set x = data.update({ "experimentalFeatures": f }) %}
+{% set x = data.update({ "waypoints" : data.waypoints | wp(u)}) %} {# merge friend-specific waypoints #}
 {{ data | to_nice_json }}
