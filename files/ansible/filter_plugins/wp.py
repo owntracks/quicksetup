@@ -28,7 +28,7 @@ def wp(data, username):
                 d = json.loads(f.read())
                 if "waypoints" not in d and d.get("_type", "unknown") != "waypoints":
                     raise AnsibleFilterError("Not an OTRW file in %s" % path)
-                new_waypoints = d["waypoints"]
+                new_waypoints = new_waypoints + d["waypoints"]
             except:
                 raise AnsibleFilterError("Cannot parse OTRW from %s" % path)
 
