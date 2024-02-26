@@ -9,6 +9,14 @@ import yaml
 # is read and merged into the list of waypoints contained in
 # `data'.
 
+
+def test_object(data, path):
+
+    for waypoint in data:
+        for key in [ "_type", "desc", "tst", "rad", "lat", "lon" ]:
+            if key not in waypoint:
+                raise AnsibleFilterError("Key [%s] is missing in %s" % (key, path))
+
 def load_file(username, filetype):
 
     data = []
@@ -22,6 +30,7 @@ def load_file(username, filetype):
                         raise AnsibleFilterError("Not an OTRW file in %s" % path)
                     else:
                         data = data["waypoints"]
+                test_object(data, path)
 
             except:
                 raise AnsibleFilterError("Cannot load %s from %s" % (filetype, path))
