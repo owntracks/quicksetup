@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd "$(dirname $0)" || { echo "Can't cd to boostrap" >&2; exit 2; }
+
 if ! [ -f configuration.yaml ]; then
 	echo "Have you forgotten to copy and edit configuration.yaml?"
 	exit 2
