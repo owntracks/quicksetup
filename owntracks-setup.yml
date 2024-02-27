@@ -97,7 +97,7 @@
      - name: "system: add passwords to userdata"
        set_fact:
           friends: "{{ friends | mkpasswords(otdir + '/userdata') }}"
-       tags: web, pw
+       tags: web, pw, otrc
 
      - name: "system: create password files in userdata"
        copy:
@@ -118,7 +118,7 @@
        loop: "{{ friends }}"
        loop_control:
            label: "{{ item.username|lower }}-{{ item.devicename|lower }}"
-       tags: web
+       tags: web, otrc
 
 #                            __ _ _
 #   _____      ____ _ _ __  / _(_) | ___
@@ -401,6 +401,7 @@
               src: files/nginx/otrc.php.j2
               dest: "{{ webroot }}/owntracks/otrc.php"
               mode: 0444
+           tags: otrc
 
          - name: "nginx: install favicon.ico"
            copy:
