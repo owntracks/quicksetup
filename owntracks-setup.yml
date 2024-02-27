@@ -1,3 +1,4 @@
+---
 - name: OwnTracks Quick Setup
   hosts: localhost
   connection: local
@@ -312,7 +313,7 @@
           content: |
              [Service]
              # works as environment variable only (not in ot-recorder defaults)
-             Environment="OTR_LMDBSIZE={{ 5 * 1025 * 1024 * 1024 }}"
+             Environment="OTR_LMDBSIZE={{ 5 * 1024 * 1024 * 1024 }}"
           dest: "/etc/systemd/system/ot-recorder.service.d/override.conf"
           mode: 0444
 
