@@ -54,10 +54,10 @@
 	       "showExperimentalPreferenceUI",
 	       "allowSmallKeepalive",
 	       "useOSMMap" ] %}
+{% set x = data.update({ "experimentalFeatures": f }) %}
 {% if opencage_apikey is defined %}
 {%   set x = data.update({ "opencageApiKey": opencage_apikey|string }) %}
 {%   set x = data.update({ "reverseGeocodeProvider": "OpenCage" }) %}
 {% endif %}
-{% set x = data.update({ "experimentalFeatures": f }) %}
-{% set x = data.update({ "waypoints" : data.waypoints | wp(u)}) %} {# merge friend-specific waypoints #}
+{% set x = data.update({ "waypoints" : data.waypoints | wp(u)}) %}
 {{ data | to_nice_json }}
