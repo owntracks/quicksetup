@@ -35,7 +35,7 @@
        assert:
            that:
              - "ansible_version.full is version('2.4', '>=')"
-             - "ansible_distribution_release in [ 'bookworm', 'jammy' ]"
+             - "ansible_distribution_release in [ 'bookworm', 'jammy', 'mantic' ]"
              - "'community.general.ufw' is community.general.a_module"
              - "'community.general.htpasswd' is community.general.a_module"
            # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"
