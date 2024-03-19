@@ -10,7 +10,7 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 
 ## requirements
 
-- VPS (512MB RAM) with Linux. Debian (12) or Ubuntu (Jammy)
+- VPS (512MB RAM) with Linux. Debian (12) or Ubuntu (Jammy, Mantic)
 - alternatively, a Raspberry Pi with Raspbian _bookworm_
 - a DNS domain name pointing to the Linux machine
 - three open TCP ports (80, 443, 8883)
