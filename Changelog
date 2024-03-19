@@ -22,3 +22,5 @@
 2024-FEB-24: add support for friend-specific MQTT ACLs
 2024-FEB-24: add support for mostly removing friend/device (ot-userdel)
 2024-FEB-25: add support for user-specific waypoints (#27)
+2024-MAR-19: add support for ubuntu 23.10 mantic
+2024-MAR-19: fail if bootstrap is not running as root

@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+if [ $(id -u) -ne 0 ]; then
+	echo "Please run $0 as root or using sudo!"
+	exit 2
+fi
 
 cd "$(dirname $0)" || { echo "Can't cd to boostrap" >&2; exit 2; }
 
