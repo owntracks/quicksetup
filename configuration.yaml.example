@@ -4,6 +4,9 @@
 # backend will be reacheable. We use this to enroll in
 # Let's Encrypt certificates for this domain on your behalf
 #
+# Make sure you replace 'owntracks.example.net' by the correct
+# name for your installation.
+#
 
 dns_domain: "owntracks.example.net"
 
