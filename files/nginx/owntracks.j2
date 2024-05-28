@@ -29,8 +29,13 @@ server {
 
 {% endif %}
 
+	location = / {
+		return 301 $scheme://$host/owntracks/;
+	}
+
 	location / {
 		index  index.html index.htm;
+		try_files $uri $uri/ =404;
 	}
 
 	location ~ \.php$ {
