@@ -419,6 +419,12 @@
 #  |_| |_|  \___/|_| |_|\__\___|_| |_|\__,_|
 #                                           
 
+     - name: "frontend: ensure directory is removed before upgrade"
+       file:
+          path: "{{ otweb }}/frontend"
+          state: absent
+       tags: fe
+
      - name: "frontend: create frontend/ directory in Web root"
        file:
           path: "{{ otweb }}/frontend"
