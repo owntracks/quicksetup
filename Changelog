@@ -26,3 +26,4 @@
 2024-MAR-19: fail if bootstrap is not running as root
 2024-MAY-28: improve front end URL (/ to /owntracks) (#42)
 2024-JUN-16: bump Frontend from v2.12.0 to v2.15.3
+2024-JUN-19: configure TLS in Mosquitto only if email (TLS) is defined (#48)

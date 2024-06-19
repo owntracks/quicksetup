@@ -26,10 +26,13 @@ password_file /etc/mosquitto/mosquitto.pw
 # -- 1883 ----- Plain (loopback only)
 listener 1883 127.0.0.1
 
+{% if email is defined %}
 # -- 8883 ----- TLS
 listener 8883
 # cafile /etc/mosquitto/certs/.lego/certificates/{{ dns_domain }}.issuer.crt
 cafile {{ otdir }}/tls/cert.crt
 certfile {{ otdir }}/tls/cert.crt
 keyfile {{ otdir }}/tls/cert.key
+{% endif %}
+
 # -- ends
