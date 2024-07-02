@@ -9,7 +9,6 @@
      packages:
         - lego
         - net-tools
-        - ufw
         - mosquitto
         - mosquitto-clients
         - nginx
@@ -36,7 +35,6 @@
            that:
              - "ansible_version.full is version('2.4', '>=')"
              - "ansible_distribution_release in [ 'bookworm', 'jammy', 'mantic', 'noble' ]"
-             - "'community.general.ufw' is community.general.a_module"
              - "'community.general.htpasswd' is community.general.a_module"
            # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"
 
@@ -68,21 +66,6 @@
        apt:
           name: "{{ packages }}"
           update_cache: true
-
-     - name: "system: add ufw open ports"
-       community.general.ufw:
-          rule: allow
-          port: "{{ item }}"
-          proto: "tcp"
-       loop:
-          - "ssh"
-          - "80"
-          - "443"
-          - "8883"
-
-     - name: "system: enable ufw"
-       community.general.ufw:
-          state: enabled
 
      - name: "system: create directories"
        file:

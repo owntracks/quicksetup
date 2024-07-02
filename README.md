@@ -31,7 +31,6 @@ Quicksetup [is documented in the OwnTracks Booklet](https://owntracks.org/bookle
 - optional but recommended configuration of [OpenCageData](https://opencagedata.com/) for reverse geo in Recorder defaults file and in `.otrc` for Android devices. (Sign up for [a free account](https://opencagedata.com/users/sign_up) you use with OwnTracks.) Location data is cached by the Recorder and stored alongside location publishes, served from the API
 - should be able to support a dozen or more friends on a 512MB VPS
 - `mosquitto_pub`/`mosquitto_sub` pre-configured to use local broker with files in `$HOME/.config/`
-- ufw firewall with open TCP ports at 22, 80, 443, 8883
 - `jq(1)` and `jo(1)` commands for working with JSON
 - bootstrapping of installation
 - Recorder Views (without requiring basic auth)
