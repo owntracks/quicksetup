@@ -22,6 +22,7 @@
         - python3-paho-mqtt
         - logrotate
         - python3-cryptography
+     override: "/etc/systemd/system/ot-recorder.service.d/override.conf"
   tasks:
 
      - name: "system: template out sys.info"
@@ -297,8 +298,9 @@
              [Service]
              # works as environment variable only (not in ot-recorder defaults)
              Environment="OTR_LMDBSIZE={{ 5 * 1024 * 1024 * 1024 }}"
-          dest: "/etc/systemd/system/ot-recorder.service.d/override.conf"
+          dest: "{{ override }}"
           mode: 0444
+       when: override is not exists
 
      - name: "ot-recorder: add/delete keys for users which have them"
        shell:
