@@ -28,3 +28,5 @@
 2024-JUN-16: bump Frontend from v2.12.0 to v2.15.3
 2024-JUN-19: configure TLS in Mosquitto only if email (TLS) is defined (#48)
 2024-JUL-02: remove UFW firewall (#50)
+2024-JUL-26: ot-recorder's unit file override.conf is templated out only if it doesn't yet exist
+2024-NOV-17: ensure correct ownership/permissions on mosquitto.{pw,acl} (#66)
