@@ -24,6 +24,7 @@
         - python3-cryptography
         - cron
      override: "/etc/systemd/system/ot-recorder.service.d/override.conf"
+     mosquitto_user: "mosquitto"
   tasks:
 
      - name: "system: template out sys.info"
@@ -206,7 +207,7 @@
        template:
           src: files/mosquitto/mosquitto.pw.j2
           dest: "{{ mosquittodir }}/mosquitto.pw"
-          owner: root
+          owner: "{{ mosquitto_user }}"
           group: root
           mode: 0440
        notify: restart_mosquitto
@@ -225,7 +226,7 @@
        template:
           src: files/mosquitto/mosquitto.acl.j2
           dest: "{{ mosquittodir }}/mosquitto.acl"
-          owner: root
+          owner: "{{ mosquitto_user }}"
           group: root
           mode: 0440
           # validate: "mosquitto --test-config " # FIXME: in 2.1
