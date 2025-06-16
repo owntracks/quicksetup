@@ -12,6 +12,9 @@ if ! [ -f configuration.yaml ]; then
 	exit 2
 fi
 
+printf "This program will overwrite existing files! Hit ENTER to continue: "
+read ans
+
 ADIR=/usr/local/owntracks/ansible
 
 if ! [ -x $ADIR/bin/ansible-playbook ]; then
