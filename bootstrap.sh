@@ -35,7 +35,7 @@ if ! [ -x $ADIR/bin/ansible-playbook ]; then
 
 	# install ansible core into a python venv
 	sudo -u ansible python3 -mvenv $ADIR
-	sudo -u ansible $ADIR/bin/pip install ansible-core
+	sudo -u ansible $ADIR/bin/pip install ansible-core==2.18.7
 
 	sudo -u ansible $ADIR/bin/ansible-galaxy collection install \
 		community.general \

@@ -37,7 +37,7 @@
      - name: "verify some requirements"
        assert:
            that:
-             - "ansible_version.full is version('2.4', '>=')"
+             - "ansible_version.full is version('2.18', '>=')"
              - "ansible_distribution_release in [ 'bookworm', 'jammy', 'mantic', 'noble' ]"
              - "'community.general.htpasswd' is community.general.a_module"
            # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"
@@ -184,7 +184,7 @@
                   hour: "04"
                   user: root
                   job: "[ -x {{ otdir }}/lego/enroll.sh ] && {{ otdir }}/lego/enroll.sh"
-       when: have_acme == 1
+       when: have_acme|int == 1
        tags: lego
 
 
