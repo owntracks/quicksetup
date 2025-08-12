@@ -58,7 +58,7 @@
 
      - name: "system: install OwnTracks repository key"
        get_url:
-          url: https://raw.githubusercontent.com/owntracks/recorder/master/etc/repo.owntracks.org.gpg.key
+          url: https://raw.githubusercontent.com/owntracks/recorder/master/etc/repo-v2.owntracks.org.gpg.key
           dest: /etc/apt/trusted.gpg.d/owntracks.asc
 
      - name: "system: install OwnTracks repository"

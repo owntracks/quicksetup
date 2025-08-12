@@ -1,3 +1,5 @@
+2025-AUG-12: new -v2 key source for packages
+2025-AUG-01: pin ansible-core version
 2024-FEB-02: ot-recorder systemd LMdb override size now defaults to new Recorder default
 2024-FEB-04: add support for configuring optional payload encryption for friends
 2024-FEB-05: remove Recorder key for user-device if no longer in configuration.yaml
