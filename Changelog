@@ -1,3 +1,5 @@
+
+2025-AUG-28: add signed-by to owntracks repository
 2025-AUG-12: new -v2 key source for packages
 2025-AUG-01: pin ansible-core version
 2024-FEB-02: ot-recorder systemd LMdb override size now defaults to new Recorder default

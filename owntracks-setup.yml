@@ -63,7 +63,7 @@
 
      - name: "system: install OwnTracks repository"
        apt_repository:
-          repo: "deb  http://repo.owntracks.org/debian {{ ot_repo }} main"
+          repo: "deb [signed-by=/etc/apt/trusted.gpg.d/owntracks.asc] http://repo.owntracks.org/debian {{ ot_repo }} main"
           state: present
 
      - name: "system: install required packages"
