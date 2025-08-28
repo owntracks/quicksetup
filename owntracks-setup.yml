@@ -37,7 +37,7 @@
      - name: "verify some requirements"
        assert:
            that:
-             - "ansible_version.full is version('2.18', '>=')"
+             - "ansible_version.full is version('2.17', '>=')"
              - "ansible_distribution_release in [ 'bookworm', 'jammy', 'mantic', 'noble' ]"
              - "'community.general.htpasswd' is community.general.a_module"
            # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"

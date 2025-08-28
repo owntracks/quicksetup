@@ -1,4 +1,5 @@
 
+2025-AUG-28: get pip to install ansible-core<2.19 solves the problem to python3 dep
 2025-AUG-28: add signed-by to owntracks repository
 2025-AUG-12: new -v2 key source for packages
 2025-AUG-01: pin ansible-core version
