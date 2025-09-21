@@ -20,7 +20,7 @@ ADIR=/usr/local/owntracks/ansible
 if ! [ -x $ADIR/bin/ansible-playbook ]; then
 	echo "Attempting to install ansible and prerequisites for bootstrapping"
 	sudo apt update
-	sudo NEEDRESTART_MODE=a apt -qq install -y python3-pip python3-venv
+	sudo NEEDRESTART_MODE=a apt -qq install -y python3-pip python3-venv gpg
 
 	# create a dedicated user for Ansible (without login capabilities)
 	#

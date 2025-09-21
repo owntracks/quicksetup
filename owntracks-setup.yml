@@ -5,7 +5,7 @@
   gather_facts: true
   vars_files: configuration.yaml
   vars:
-     ot_repo: "bookworm"
+     ot_repo: "trixie"
      packages:
         - lego
         - net-tools
@@ -38,7 +38,7 @@
        assert:
            that:
              - "ansible_version.full is version('2.17', '>=')"
-             - "ansible_distribution_release in [ 'bookworm', 'jammy', 'mantic', 'noble' ]"
+             - "ansible_distribution_release in [ 'bookworm', 'trixie', 'jammy', 'mantic', 'noble' ]"
              - "'community.general.htpasswd' is community.general.a_module"
            # - "'community.crypto.x509_certificate_info' is community.crypto.a_module"
 
