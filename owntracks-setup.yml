@@ -5,7 +5,7 @@
   gather_facts: true
   vars_files: configuration.yaml
   vars:
-     ot_repo: "trixie"
+     ot_repo: "{{ ansible_distribution_release }}"
      packages:
         - lego
         - net-tools
