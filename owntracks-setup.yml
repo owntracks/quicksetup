@@ -62,9 +62,11 @@
           dest: /etc/apt/trusted.gpg.d/owntracks.asc
 
      - name: "system: install OwnTracks repository"
-       apt_repository:
-          repo: "deb [signed-by=/etc/apt/trusted.gpg.d/owntracks.asc] http://repo.owntracks.org/debian {{ ot_repo }} main"
-          state: present
+       copy:
+          content: |
+            deb [signed-by=/etc/apt/trusted.gpg.d/owntracks.asc] http://repo.owntracks.org/debian {{ ot_repo }} main
+          dest: "/etc/apt/sources.list.d/repo_owntracks_org.list"
+          mode: 0444
 
      - name: "system: install required packages"
        apt:
