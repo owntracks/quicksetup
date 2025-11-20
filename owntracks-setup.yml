@@ -61,12 +61,20 @@
           url: https://raw.githubusercontent.com/owntracks/recorder/master/etc/repo-v2.owntracks.org.gpg.key
           dest: /etc/apt/trusted.gpg.d/owntracks.asc
 
+     - name: "system: remove possible previous OwnTracks sources"
+       file:
+          path: "/etc/apt/sources.list.d/{{ item }}"
+          state: absent
+       loop:
+         - "repo_owntracks_org_debian.list"
+         - "repo_owntracks_org.list"
+         - "repo_owntracks_org_ubuntu.list"
+
      - name: "system: install OwnTracks repository"
-       copy:
-          content: |
-            deb [signed-by=/etc/apt/trusted.gpg.d/owntracks.asc] http://repo.owntracks.org/debian {{ ot_repo }} main
-          dest: "/etc/apt/sources.list.d/repo_owntracks_org.list"
-          mode: 0444
+       apt_repository:
+          repo: "deb [signed-by=/etc/apt/trusted.gpg.d/owntracks.asc] http://repo.owntracks.org/debian {{ ot_repo }} main"
+          filename: owntracks
+          state: present
 
      - name: "system: install required packages"
        apt:
