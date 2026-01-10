@@ -35,7 +35,7 @@ email: "you@example.net"
 # are generated and stored at /usr/local/owntracks/userdata/*.pass
 # on this system.
 #
-# username and devicename may contain digits and lowercase letters.
+# username and devicename may contain digits and *lowercase* letters.
 
 friends:
   - { tid: "JJ", username: "jane",     devicename: "nokia" }
