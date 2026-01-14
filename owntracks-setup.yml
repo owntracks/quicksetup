@@ -28,6 +28,11 @@
      mosquitto_group: "mosquitto"
   tasks:
 
+     - name: "coerce ot_repo to bookworm for Ubuntu 24.04 (noble)"
+       set_fact:
+          ot_repo: "bookworm"
+       when: "ot_repo == 'noble'"
+
      - name: "system: template out sys.info"
        template:
           src: files/system/sys.info.j2
